@@ -8,6 +8,7 @@ import { EmployeeResponse } from "./employee.responses";
 import { EmployeeRoleResponse } from "./employeeRole.response";
 import { RoleEntity } from "src/registration/persistence/roles/role.entity";
 import { AccountEntity } from "src/registration/persistence/accounts.entity";
+import { RolePermissionEntity } from "src/registration/persistence/roles/role-permission.entity";
 @Injectable()
 export class EmployeeQueries {
     constructor(
@@ -17,6 +18,8 @@ export class EmployeeQueries {
         private employeeRoleRepository: Repository<EmployeeRoleEntity>,
         @InjectRepository(RoleEntity)
         private RoleEntityRepository: Repository<RoleEntity>,
+        @InjectRepository(RolePermissionEntity)
+        private rolePermissionRepository: Repository<RolePermissionEntity>,
         @InjectRepository(AccountEntity)
         private accountRepository: Repository<AccountEntity>
     ) {
@@ -73,6 +76,7 @@ export class EmployeeQueries {
         if (!result) {
             throw new NotFoundException(`Employee  not found`);
         }
+        console.log(result[0].employeeRole)
         return EmployeeResponse.fromEntity(result[0]).employeeRole
     }
                                                                               
@@ -98,8 +102,24 @@ export class EmployeeQueries {
 
     // for Authentication 
     async getEmployeeByEmail(email:string): Promise<any> {
-        const result =await this.employeeRepository.findOne({where:{email:email},relations:['employeeRole']})
-         return result
+
+        const result =await this.employeeRepository.findOne({where:{email:email},relations:['employeeRole','employeeRole.role.rolePermission']})
+        console.log('dddddddddddddddddddddddddddd ',result)
+        result?.employeeRole[0]?.role?.rolePermission
+        let permission=[] 
+        let data:any=result;
+    
+        if(result?.employeeRole){
+            for(let index=0;index<result?.employeeRole.length;index++){
+                permission=[]
+                permission.push(await this.rolePermissionRepository.find({where:{roleId:result.employeeRole[index].roleId}}))
+                data.employeeRole[index].role.rolePermission=permission
+            }
+            // data.permissions=permission;
+
+        }
+        console.log('resultresultresultresultresult ',data?.employeeRole?.rolePermission)
+         return data
     }
     async getAccountById(id:string): Promise<any> {
         return await this.accountRepository.findOne({where:{id}})

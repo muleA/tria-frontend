@@ -121,7 +121,7 @@ export class EmployeeCommand {
     async addRoleToEmployeeCommand(command: AddRoleToEmployeeCommand[], employeeId: string): Promise<any> {
         try {
             this.employeeDomain = await this.employeeRepository.findById(employeeId)
-            console.log(command)
+            console.log(this.employeeDomain)
             if (!this.employeeDomain) {
                 throw new NotFoundException(`Employee with Id ${employeeId} does not exist`);
             }

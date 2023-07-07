@@ -37,21 +37,21 @@ export class EducationResponse {
   static fromEntity(licenseApplicantEducationEntity: LicenseApplicantEducationEntity): EducationResponse {
     const educationResponse: EducationResponse = new EducationResponse();
 
-    educationResponse.id = licenseApplicantEducationEntity.id;
-    educationResponse.userId = licenseApplicantEducationEntity.userId;
-    educationResponse.Institution = licenseApplicantEducationEntity.Institution;
-    educationResponse.fieldOfStudy = licenseApplicantEducationEntity.fieldOfStudy;
-    educationResponse.professionalTitle = licenseApplicantEducationEntity.professionalTitle;
-    educationResponse.receivedDate = licenseApplicantEducationEntity.receivedDate;
-    educationResponse.studentIdNumber = licenseApplicantEducationEntity.studentIdNumber;
+    educationResponse.id = licenseApplicantEducationEntity?.id;
+    educationResponse.userId = licenseApplicantEducationEntity?.userId;
+    educationResponse.Institution = licenseApplicantEducationEntity?.Institution;
+    educationResponse.fieldOfStudy = licenseApplicantEducationEntity?.fieldOfStudy;
+    educationResponse.professionalTitle = licenseApplicantEducationEntity?.professionalTitle;
+    educationResponse.receivedDate = licenseApplicantEducationEntity?.receivedDate;
+    educationResponse.studentIdNumber = licenseApplicantEducationEntity?.studentIdNumber;
     educationResponse.file = licenseApplicantEducationEntity?.file;
 
-    educationResponse.createAt = licenseApplicantEducationEntity.createdAt
-    educationResponse.createdBy = licenseApplicantEducationEntity.createdBy
-    educationResponse.updatedAt = licenseApplicantEducationEntity.updatedAt
-    educationResponse.updatedBy = licenseApplicantEducationEntity.updatedBy
-    educationResponse.deletedAt = licenseApplicantEducationEntity.deletedAt
-    educationResponse.deletedBy = licenseApplicantEducationEntity.deletedBy
+    educationResponse.createAt = licenseApplicantEducationEntity?.createdAt
+    educationResponse.createdBy = licenseApplicantEducationEntity?.createdBy
+    educationResponse.updatedAt = licenseApplicantEducationEntity?.updatedAt
+    educationResponse.updatedBy = licenseApplicantEducationEntity?.updatedBy
+    educationResponse.deletedAt = licenseApplicantEducationEntity?.deletedAt
+    educationResponse.deletedBy = licenseApplicantEducationEntity?.deletedBy
     return educationResponse;
   }
   static fromDomain(licenseApplicantEducation: LicenseApplicantEducation): EducationResponse {

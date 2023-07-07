@@ -37,6 +37,8 @@ export class UserResponse {
     @ApiProperty()
     email: string
     @ApiProperty()
+    profilePicture: string
+    @ApiProperty()
     education: EducationResponse[]
     @ApiProperty()
     expiriance: ExperienceResponses[]
@@ -62,21 +64,24 @@ export class UserResponse {
     @ApiProperty()
     deletedBy: string
     static fromEntity(userentity: UserEntity): UserResponse {
+    console.log('111111111111111111111111111111111111111',userentity)
+
         const userResponse = new UserResponse();
-        userResponse.id = userentity.id;
-        userResponse.accountId = userentity.accountId;
-        userResponse.firstName = userentity.firstName;
-        userResponse.firstName = userentity.firstName;
-        userResponse.lastName = userentity.lastName;
-        userResponse.gender = userentity.gender;
-        userResponse.wereda = userentity.wereda;
-        userResponse.kebele = userentity.kebele;
-        userResponse.city = userentity.city;
-        userResponse.phone = userentity.phone;
-        userResponse.subCity = userentity.subCity;
-        userResponse.houseNumber = userentity.houseNumber;
-        userResponse.email = userentity.email;
-        userResponse.account=userentity.account ?AccountResponse.fromEntity(userentity?.account):null
+        userResponse.id = userentity?.id;
+        userResponse.accountId = userentity?.accountId;
+        userResponse.firstName = userentity?.firstName;
+        userResponse.middleName = userentity?.middleName;
+        userResponse.lastName = userentity?.lastName;
+        userResponse.gender = userentity?.gender;
+        userResponse.city = userentity?.city;
+        userResponse.wereda = userentity?.wereda;
+        userResponse.kebele = userentity?.kebele;
+        userResponse.phone = userentity?.phone;
+        userResponse.subCity = userentity?.subCity;
+        userResponse.houseNumber = userentity?.houseNumber;
+        userResponse.email = userentity?.email;
+        userResponse.profilePicture = userentity?.profilePicture;
+        userResponse.account=userentity?.account ?AccountResponse.fromEntity(userentity?.account):null
         userResponse.certificate = userentity?.certificate?.map((item) =>
             CertificateResponse.fromEntity(item)
         )
@@ -92,14 +97,14 @@ export class UserResponse {
         userResponse.license = userentity?.license?.map((item) =>
             LicenseResponse.fromEntity(item),
         );
+        console.log('5555555555555555555555555555555555',userResponse)
 
-
-        userResponse.createdAt = userentity.createdAt
-        userResponse.createdBy = userentity.createdBy
-        userResponse.updatedAt = userentity.updatedAt
-        userResponse.updatedBy = userentity.updatedBy
-        userResponse.deletedAt = userentity.deletedAt
-        userResponse.deletedBy = userentity.deletedBy
+        userResponse.createdAt = userentity?.createdAt
+        userResponse.createdBy = userentity?.createdBy
+        userResponse.updatedAt = userentity?.updatedAt
+        userResponse.updatedBy = userentity?.updatedBy
+        userResponse.deletedAt = userentity?.deletedAt
+        userResponse.deletedBy = userentity?.deletedBy
         return userResponse;
     }
     static fromDomain(user: User): UserResponse {
@@ -117,6 +122,7 @@ export class UserResponse {
         userResponse.subCity = user.subCity;
         userResponse.houseNumber = user.houseNumber;
         userResponse.email = user.email;
+        userResponse.profilePicture = user.profilePicture;
         // userResponse.account=user?.account?AccountResponse.fromDomain(user.account):null
         userResponse.certificate = user?.certificate?.map((item) =>
             CertificateResponse.fromDomain(item)

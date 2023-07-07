@@ -4,11 +4,12 @@ import { User } from "./user";
 
 export class License   {
     id:string
+    licenseNumber:string
+    issuedBy:string
     applicationId:string
     validFrom: Date;
     validTo: Date;
     userId:string
-    applierType:string
     status:string
     comment:string
     user:User

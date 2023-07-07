@@ -28,6 +28,7 @@ export class PermissionController {
     async getpermissionId(@Param('permissionId') roleId: string) {
         return await this.queries.getPermissionById(roleId)
     }
+    
     @Get("get-archived-permissions")
     @ApiOkResponse({ type: Boolean })
     async getArchivedUser() {

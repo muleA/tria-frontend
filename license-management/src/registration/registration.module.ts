@@ -26,7 +26,7 @@ import { RoleController } from './controllers/role/role.controller';
 import { RoleQueries } from './useCases/employee.commands.ts/role.usecase.queries';
 import { RoleCommand } from './useCases/employee.commands.ts/role.usecases.command';
 import { RoleRepository } from './persistence/roles/role.repository';
-import { LocalAuthGuard } from 'src/back-office-auth/local-auth.guard';
+// import { LocalAuthGuard } from 'src/back-office-auth/local-auth.guard';
 import { LicenseEntity } from './persistence/License.entity';
 import { PermissionController } from './controllers/permission/permission.controller';
 import { RolePermissionEntity } from './persistence/roles/role-permission.entity';
@@ -34,10 +34,12 @@ import { PermissionEntity } from './persistence/Permission/permission.entity';
 import { PermissionCommand } from './useCases/permission.commands/permission.usecases.command';
 import { PermissionQueries } from './useCases/permission.commands/permission.usecase.queries';
 import { PermissionRepository } from './persistence/Permission/permission.repository';
+import { BackOfficeAuthModule } from 'src/back-office-auth/back-office-auth.module';
 
 @ApiTags('Users')
 @Module({
-  imports: [TypeOrmModule.forFeature([
+  imports: [
+    TypeOrmModule.forFeature([
     LicenseApplicationEntity,
     LicenseApplicantEducationEntity,
     LicenseApplicantexperienceEntity,
@@ -54,6 +56,7 @@ import { PermissionRepository } from './persistence/Permission/permission.reposi
     // LocalStrategy,
     // LocalAuthGuard
   ]),
+  BackOfficeAuthModule,
   MulterModule,
   ],
   providers: [
@@ -74,7 +77,12 @@ import { PermissionRepository } from './persistence/Permission/permission.reposi
     PermissionQueries
   ],
   exports:[UserQueries,EmployeeQueries],
-  controllers: [RegistrationController,UserController, EmployeesController, RoleController, PermissionController,PermissionController],
+  controllers: [RegistrationController,
+    UserController, 
+    EmployeesController, 
+    RoleController, 
+    PermissionController,
+    PermissionController],
 })
 export class RegistrationModule {
   constructor() {

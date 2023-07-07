@@ -21,8 +21,22 @@ export class LicenseApplication {
   delegationFile:string
   comment:string
   license:License
+  facilityName:string
+  state:string
+  subCity:string  
+  woreda:string  
+  kebele:string  
+  houseNumber:string
+  phone:string
+  ownerName:string
+  lastName:string
+  professionalName:string
+  professionalLastName:string
+  qualificationLevel:string
+  professionalLicenseNumber:string
+  applierProfilePicture:string
 
-
+  userId:string
   createdAt: Date
   createdBy: string
   deletedAt: Date

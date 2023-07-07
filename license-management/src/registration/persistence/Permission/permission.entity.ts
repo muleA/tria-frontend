@@ -25,7 +25,7 @@ import { RolePermissionEntity } from "../roles/role-permission.entity";
   
     @Column({name:'key'})
     key: string;
-    @Column({name:"is_active"})
+    @Column({name:"is_active",default:true})
     isActive: boolean;
     @OneToMany(
       () => RolePermissionEntity,

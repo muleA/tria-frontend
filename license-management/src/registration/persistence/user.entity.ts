@@ -37,12 +37,14 @@ export class UserEntity extends CommonEntity {
   kebele: string;
   @Column({ name: 'phone' })
   phone: string;
-  @Column({ name: 'email' })
+  @Column({ name: 'email'})
   email: string;
   @Column({ name: 'status',default:'active' })
   status: string;
   @Column({ name: 'house_number' })
   houseNumber: string;
+  @Column({ name: 'profile_picture' , nullable:true})
+  profilePicture: string;
   @OneToMany(
     () => LicenseApplicantEducationEntity,
     (applicantEducation) => applicantEducation.user,

@@ -41,21 +41,21 @@ export class AccountResponse  {
   static fromEntity(accountEntity: AccountEntity): AccountResponse {
     console.log('llllllllllllllllllllllllllllll')
     const accountResponse: AccountResponse = new AccountResponse();
-    accountResponse.id = accountEntity.id;
+    accountResponse.id = accountEntity?.id;
     // accountResponse.userId = accountEntity.userId;
-    accountResponse.userName = accountEntity.userName;
-    accountResponse.status = accountEntity.status;
-    accountResponse.Password = accountEntity.password;
-    accountResponse.email = accountEntity.email;
-    accountResponse.accountType = accountEntity.accountType;
+    accountResponse.userName = accountEntity?.userName;
+    accountResponse.status = accountEntity?.status;
+    accountResponse.Password = accountEntity?.password;
+    accountResponse.email = accountEntity?.email;
+    accountResponse.accountType = accountEntity?.accountType;
     console.log('llllllllllllllllllllllllllllll')
 
-    accountResponse.createAt=accountEntity.createdAt
-    accountResponse.createdBy=accountEntity.createdBy
-    accountResponse.updatedAt=accountEntity.updatedAt
-    accountResponse.updatedBy=accountEntity.updatedBy
-    accountResponse.deletedAt=accountEntity.deletedAt
-    accountResponse.deletedBy=accountEntity.deletedBy
+    accountResponse.createAt=accountEntity?.createdAt
+    accountResponse.createdBy=accountEntity?.createdBy
+    accountResponse.updatedAt=accountEntity?.updatedAt
+    accountResponse.updatedBy=accountEntity?.updatedBy
+    accountResponse.deletedAt=accountEntity?.deletedAt
+    accountResponse.deletedBy=accountEntity?.deletedBy
     return accountResponse;
   }
   static fromDomain(userAcount: UserAcount): AccountResponse {

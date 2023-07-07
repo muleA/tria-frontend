@@ -28,11 +28,13 @@ import { CreateAccountCommand, UpdateAccountCommand } from "./account.command";
 import { AccountResponse } from "./account.response";
 import { AccountEntity } from "../persistence/accounts.entity";
 import { ApplicationResponse } from "./applicatopn.response";
-import { ChangeApplicationStatusCommand, CreateApplicationCommand } from "./application.command";
+import { ChangeApplicationStatusCommand, CreateApplicationCommand, CreateHealthFacilityApplicationCommand, UpdateApplicationCommand, UpdateHealthFacilityApplicationCommand } from "./application.command";
 import { LicenseApplicationEntity } from "../persistence/application.entity";
 import { CreateLicenseCommand } from "./license.command";
 import { LicenseResponse } from "./License.response";
 import { LicenseEntity } from "../persistence/License.entity";
+import { License } from "../domain/License";
+import { BackOfficeAuthService } from "src/back-office-auth/back-office-auth/back-office-auth.service";
 
 @Injectable()
 export class UserCommand {
@@ -51,7 +53,9 @@ export class UserCommand {
         @InjectRepository(LicenseApplicationEntity)
         private applicationRepository: Repository<LicenseApplicationEntity>,
         @InjectRepository(LicenseEntity)
-        private licenseRepository: Repository<LicenseEntity>
+        private licenseRepository: Repository<LicenseEntity>,
+        private mailerService: BackOfficeAuthService
+
 
     ) { }
 
@@ -66,6 +70,23 @@ export class UserCommand {
             if (!this.userDomain) {
 
                 throw new NotFoundException(`Failed to create user`);
+            }
+            if (this.userDomain) {
+                const message = ' Hello Mr/Ms' + this.userDomain.firstName + ' ' + this.userDomain.middleName + 'Congratulations  your application is successfully  Approved Please login ' +
+                    'and check your license '
+                const subject = 'Regarding your Application '
+                const html = '<p style="color: green; font-size: 16px;">This is Ministry of Health, nice to contact you Mr/Ms' + this.userDomain.firstName + ' ' + this.userDomain.middleName + ' Your Account is successfully created</p>' +
+                    '<p style="font-weight: bold;">Please login and start useing our services</p>' +
+                    '<p style="margin-top: 20px;">If you have any regards, please contact us with the address below.</p>' +
+                    '<p style="font-style: italic;">Best regards,</p>' +
+                    '<p >IFHRS</p>' +
+                    '<p>Smart Health System form Ministry of Health</p>' +
+                    '<p>Website: <a href="http://localhost:3456/">http://localhost:3456/</a></p>' +
+                    '<p>Factory and Office: Lingo Tower, 11th Floor, Bole Medhanialem, Addis Ababa, Ethiopia</p>' +
+                    '<p>email/phone:info@triaplc.com/ +251 955232323</p>'
+                const email = command.email
+                const result = await this.mailerService.sendMail(email, message, subject, html)
+                console.log(result)
             }
             return UserResponse.fromDomain(this.userDomain)
         } catch (error) {
@@ -409,7 +430,7 @@ export class UserCommand {
     }
     async deleteCertificate(experienceId: string): Promise<boolean> {
         try {
-            const result = await this.experienceRepository.delete(experienceId)
+            const result = await this.certificateRepository.delete(experienceId)
             this.logger.log(
                 "Delete Certificate command executed ",
                 `Certificate  ${this.userDomain.id} have been Deleted`
@@ -536,7 +557,7 @@ export class UserCommand {
             this.userDomain.addExpiriance(filename, educationId)
             const result = await this.userRepository.updateUser(this.userDomain)
             this.logger.log(
-                "Education add file command executed ",
+                "Education  file add command executed ",
             );
             return UserResponse.fromDomain(result).expiriance
         } catch (error) {
@@ -565,21 +586,63 @@ export class UserCommand {
     }
     //Applications
 
-    async createApplication(command: CreateApplicationCommand, userId: string): Promise<any> {
+    async createApplication(command: CreateHealthFacilityApplicationCommand, userId: string): Promise<any> {
         try {
-            this.userDomain = await this.userRepository.findById(userId)
-            console.log(this.userDomain)
+            const userDomain = await this.userRepository.finduserById(userId)
+            // console.log(this.userDomain)
 
             if (!this.userDomain) {
                 throw new NotFoundException(`user with Id ${userId} not found`);
             }
-            const application = CreateApplicationCommand.fromCommand(command)
+            // console.log(this.userDomain)
+            // const application = CreateHealthFacilityApplicationCommand.fromCommand(command)
+            const application = CreateHealthFacilityApplicationCommand.fromDomain(CreateHealthFacilityApplicationCommand.fromCommand(command))
+            // console.log("commandcommandcommandcommandcommand ",command)
+
+            userDomain.applications.push(application)
+            this.userDomain = await this.userRepository.saveUser(userDomain)
+            // console.log('iiiiiinnnnssssseeeerrrttteeeddd', this.userDomain)
+            return UserResponse.fromDomain(this.userDomain).appliaction
+        } catch (error) {
+            Logger.log('Unable to create the Certificate because ', error)
+            throw new BadRequestException(error.code, error.message);
+        }
+    }
+
+    async deleteApplication(applicationId: string): Promise<boolean> {
+        try {
+            const data = await this.applicationRepository.findOneBy({ id: applicationId })
+            if (!data) {
+                throw new NotFoundException(`application with Id ${applicationId} is not found `);
+            }
+            if (data.licenseId) {
+                throw new BadRequestException(`th application Have a license can't be deleted!!`)
+            }
+            const result = await this.applicationRepository.delete(data.id)
+            this.logger.log(
+                "Delete application command executed ",
+                `Application  ${this.userDomain.id} have been Deleted`
+            );
+            if (result.affected > 0) return true;
+            return false;
+        } catch (error) {
+            Logger.log('Unable to Delete the Experience because ', error)
+            throw new BadRequestException(error.code, error.message);
+        }
+    }
+    async updateApplication(command: UpdateHealthFacilityApplicationCommand,): Promise<ApplicationResponse> {
+        try {
+            let application = await this.applicationRepository.findOne({ where: { id: command.id } })
             console.log(application)
 
-            this.userDomain.application.push(application)
-            this.userDomain = await this.userRepository.insertUser(this.userDomain)
-            console.log('iiiiiinnnnssssseeeerrrttteeeddd', this.userDomain)
-            return UserResponse.fromDomain(this.userDomain).appliaction
+            if (!application) {
+                throw new NotFoundException(`Application with Id ${command.id} not found`);
+            }
+            const applicationEntity = UpdateHealthFacilityApplicationCommand.fromCommand(command)
+            console.log(application)
+            const result = await this.applicationRepository.save(applicationEntity)
+            console.log('iiiiiinnnnssssseeeerrrttteeeddd', result)
+            return ApplicationResponse.fromDomain(result)
         } catch (error) {
             Logger.log('Unable to create the Certificate because ', error)
             throw new BadRequestException(error.code, error.message);
@@ -604,9 +667,47 @@ export class UserCommand {
             throw new BadRequestException(error.code, error.message);
         }
     }
+    async uploadProfilePicture(filename: string, applicationId: string): Promise<ApplicationResponse> {
+        try {
+
+            let result = await this.applicationRepository.findOne({ where: { id: applicationId } })
+            if (!result) {
+                throw new NotFoundException(`Application with Id ${applicationId} not found`);
+            }
+
+            result.applierProfilePicture = filename
+            result = await this.applicationRepository.save(result)
+            this.logger.log(
+                "Certificate add file command executed ",
+            );
+            return ApplicationResponse.fromEntity(result)
+        } catch (error) {
+            Logger.log('Unable to Upload the Certificate because ', error)
+            throw new BadRequestException(error.code, error.message);
+        }
+    }
+    async uploadUserProfilePicture(filename: string, userId: string): Promise<UserResponse> {
+        try {
+
+            let result = await this.userRepository.findById(userId)
+            if (!result) {
+                throw new NotFoundException(`User with Id ${userId} not found`);
+            }
+            console.log('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo', result)
+            result.profilePicture = filename
+            result = await this.userRepository.insertUser(result)
+            this.logger.log(
+                "Certificate add file command executed ",
+            );
+            return UserResponse.fromDomain(result)
+        } catch (error) {
+            Logger.log('Unable to Upload the Certificate because ', error)
+            throw new BadRequestException(error.code, error.message);
+        }
+    }
     async archiveApplication(applicationId: string): Promise<boolean> {
         try {
-            const application = await this.applicationRepository.findOne({where:{id:applicationId}})
+            const application = await this.applicationRepository.findOne({ where: { id: applicationId } })
             if (!application) {
                 throw new NotFoundException(`User with Id ${applicationId} is not found `);
             }
@@ -615,7 +716,7 @@ export class UserCommand {
                 "Archive User command executed ",
                 `user  ${this.userDomain.id} have been Archived`
             );
-            return result?true:false
+            return result ? true : false
         } catch (error) {
             Logger.log('Unable to Archive the user because ', error)
             throw new BadRequestException(error.code, error.message);
@@ -630,7 +731,7 @@ export class UserCommand {
                 "Restore Application execute",
                 `application ${applicationId} have been restored`
             );
-            return result?true:false;
+            return result ? true : false;
         } catch (error) {
             this.logger.log(`unable to retore user ${applicationId}`)
             throw new BadRequestException(error.code, error.message);
@@ -639,18 +740,63 @@ export class UserCommand {
     async changeApplicationStatus(command: ChangeApplicationStatusCommand, applicationId: string): Promise<any> {
         try {
             const application = await this.applicationRepository.findOne({ where: { id: applicationId } })
-            console.log(application)
-
             if (!application) {
                 throw new NotFoundException(`application with Id ${applicationId} not found`);
             }
-
+            // console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkk', application)
             application.status = command.status
             application.comment = command.comment
+            if (command.status == "APPROVED") {
+                const lastInserted = await this.licenseRepository.find(
+                    { order: { createdAt: 'DESC' } },
+                );
+                console.log(lastInserted)
+                const licenseEntity = new LicenseEntity()
+                lastInserted ? licenseEntity.licenseNumber = (parseInt(lastInserted[0].licenseNumber) + 1).toString() + '/' + new Date().getFullYear().toString() : licenseEntity.licenseNumber = '1' + '/' + new Date().getFullYear().toString();
 
+
+                application.status = 'APPROVED'
+                licenseEntity.applicationId = applicationId
+                licenseEntity.issuedBy = command.issuedBy
+                licenseEntity.userId = command.userId
+                licenseEntity.createdAt = command.createdAt
+                const currentDate = new Date();
+                const nextYear = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), currentDate.getDate());
+                licenseEntity.validFrom = command?.validFrom
+                licenseEntity.validTo = command?.validTo
+                if (application.applicationCategory !== 'Health Professional Licensse') {
+                    licenseEntity.validFrom = command?.validFrom
+                    licenseEntity.validTo = nextYear
+                }
+
+                const resul = await this.licenseRepository.save(licenseEntity)
+                application.licenseId = resul.id
+            }
+
+            // console.log('fffffffffffffffffff', application)
 
             const result = await this.applicationRepository.save(application)
-            console.log('iiiiiinnnnssssseeeerrrttteeeddd', result)
+
+            if (result && application.status == 'APPROVED') {
+
+                const user = await this.userRepository.findById(application.userId)
+                const message = ' Hello Mr/Ms' + user.firstName + ' ' + user.middleName + 'Congratulations  your application is successfully  Approved Please login ' +
+                    'and check your license '
+                const subject = 'Regarding your Application '
+                const html = '<p style="color: green; font-size: 16px;">This is Ministry of Health, nice to contact you. Your application is successfully approved</p>' +
+                    '<p style="font-weight: bold;">Please login and check your license.</p>' +
+                    '<p style="margin-top: 20px;">If you have any regards, please contact us with the address below.</p>' +
+                    '<p style="font-style: italic;">Best regards,</p>' +
+                    '<p >IFHRS</p>' +
+                    '<p>Smart Health System form Ministry of Health</p>' +
+                    '<p>Website: <a href="http://localhost:3456/">http://localhost:3456/</a></p>' +
+                    '<p>Factory and Office: Lingo Tower, 11th Floor, Bole Medhanialem, Addis Ababa, Ethiopia</p>' +
+                    '<p>email/phone:info@triaplc.com/ +251 955232323</p>'
+                const email = command.email
+                const result = await this.mailerService.sendMail(email, message, subject, html)
+                console.log(result)
+            }
+            // console.log('iiiiiinnnnssssseeeerrrttteeeddd', result)
             return ApplicationResponse.fromEntity(result)
         } catch (error) {
             Logger.log('Unable to create the Certificate because ', error)
@@ -676,7 +822,6 @@ export class UserCommand {
             throw new BadRequestException(error.code, error.message);
         }
     }
-
     // License 
     async createLicense(command: CreateLicenseCommand, applicationId: string): Promise<any> {
         try {

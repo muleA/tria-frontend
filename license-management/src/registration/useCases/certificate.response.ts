@@ -38,21 +38,21 @@ export class CertificateResponse{
 
   static fromEntity(certificateEntity: CertificateEntity): CertificateResponse {
     const certificateResponse: CertificateResponse = new CertificateResponse();
-    certificateResponse.id = certificateEntity.id;
-    certificateResponse.userId = certificateEntity.userId;
-    certificateResponse.Institution = certificateEntity.Institution;
-    certificateResponse.certificateTitle = certificateEntity.certificateTitle;
-    certificateResponse.name = certificateEntity.name;
-    certificateResponse.receivedDate = certificateEntity.receivedDate;
-    certificateResponse.startDate = certificateEntity.startDate;
-    certificateResponse.file = certificateEntity.file;
+    certificateResponse.id = certificateEntity?.id;
+    certificateResponse.userId = certificateEntity?.userId;
+    certificateResponse.Institution = certificateEntity?.Institution;
+    certificateResponse.certificateTitle = certificateEntity?.certificateTitle;
+    certificateResponse.name = certificateEntity?.name;
+    certificateResponse.receivedDate = certificateEntity?.receivedDate;
+    certificateResponse.startDate = certificateEntity?.startDate;
+    certificateResponse.file = certificateEntity?.file;
 
-    certificateResponse.createdAt=certificateEntity.createdAt
-    certificateResponse.createdBy=certificateEntity.createdBy
-    certificateResponse.updatedAt=certificateEntity.updatedAt
-    certificateResponse.updatedBy=certificateEntity.updatedBy
-    certificateResponse.deletedAt=certificateEntity.deletedAt
-    certificateResponse.deletedBy=certificateEntity.deletedBy
+    certificateResponse.createdAt=certificateEntity?.createdAt
+    certificateResponse.createdBy=certificateEntity?.createdBy
+    certificateResponse.updatedAt=certificateEntity?.updatedAt
+    certificateResponse.updatedBy=certificateEntity?.updatedBy
+    certificateResponse.deletedAt=certificateEntity?.deletedAt
+    certificateResponse.deletedBy=certificateEntity?.deletedBy
     return certificateResponse;
   }
   static fromDomain(certificate: Certificate): CertificateResponse {

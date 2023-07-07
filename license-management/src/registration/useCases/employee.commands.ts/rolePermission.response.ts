@@ -23,16 +23,19 @@ export class RolePermissionResponse extends Common {
   @ApiProperty()
   permissionId: string;
   @ApiProperty()
+  permissionName: string;
+  @ApiProperty()
   permission: PermissionResponse;
   
   static fromEntity(rolePermissionEntity: RolePermissionEntity): RolePermissionResponse {
     const rolePermissionResponse: RolePermissionResponse = new RolePermissionResponse();
 
-    rolePermissionResponse.id = rolePermissionEntity.id
-    rolePermissionResponse.roleId = rolePermissionEntity.roleId;
-    rolePermissionResponse.permissionId = rolePermissionEntity.permissionId;
-    rolePermissionResponse.role = RoleResponse.fromEntity(rolePermissionEntity.role);
-    rolePermissionResponse.permission = PermissionResponse.fromEntity(rolePermissionEntity.permission);
+    rolePermissionResponse.id = rolePermissionEntity?.id
+    rolePermissionResponse.roleId = rolePermissionEntity?.roleId;
+    rolePermissionResponse.permissionId = rolePermissionEntity?.permissionId;
+    rolePermissionResponse.permissionName = rolePermissionEntity?.permissionName;
+    // rolePermissionResponse.role = RoleResponse.fromEntity(rolePermissionEntity.role);
+    // rolePermissionResponse.permission = PermissionResponse.fromEntity(rolePermissionEntity.permission);
 
     rolePermissionResponse.createdAt = rolePermissionEntity.createdAt
     rolePermissionResponse.createdBy = rolePermissionEntity?.createdBy

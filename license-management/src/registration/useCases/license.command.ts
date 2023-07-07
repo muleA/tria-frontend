@@ -13,6 +13,8 @@ export class CreateLicenseCommand {
   // @IsNotEmpty()
   // @ApiProperty()
   id: string;
+  licenseNumber: string;
+  issuedBy: string;
   @ApiProperty()
   validFrom:Date
   @ApiProperty()
@@ -44,13 +46,15 @@ export class CreateLicenseCommand {
   deletedBy: string
   static fromCommands(createLicenseCommand: CreateLicenseCommand): License {
     const license: License = new License();
-    license.id = createLicenseCommand.id;
-    license.applicationId = createLicenseCommand.applicationId;
-    license.validFrom = createLicenseCommand.validFrom
-    license.validTo = createLicenseCommand.validTo
-    license.userId = createLicenseCommand.userId
-    license.status = createLicenseCommand.status
-    license.comment = createLicenseCommand.comment
+    license.id = createLicenseCommand?.id;
+    license.licenseNumber = createLicenseCommand?.licenseNumber;
+    license.issuedBy = createLicenseCommand?.issuedBy;
+    license.applicationId = createLicenseCommand?.applicationId;
+    license.validFrom = createLicenseCommand?.validFrom
+    license.validTo = createLicenseCommand?.validTo
+    license.userId = createLicenseCommand?.userId
+    license.status = createLicenseCommand?.status
+    license.comment = createLicenseCommand?.comment
 
     license.createdAt=createLicenseCommand.createAt
     license.createdBy=createLicenseCommand.createdBy
@@ -63,12 +67,14 @@ export class CreateLicenseCommand {
   static fromEntities(license: License): LicenseEntity {
     const licenseEntity: LicenseEntity = new LicenseEntity();
     licenseEntity.id = license.id;
-    licenseEntity.validFrom = license.validFrom;
-    licenseEntity.validTo = license.validTo;
-    licenseEntity.userId = license.userId;
-    licenseEntity.status = license.status;
-    licenseEntity.comment = license.comment;
-    licenseEntity.applicationId = license.applicationId;
+    licenseEntity.licenseNumber = license?.licenseNumber;
+    licenseEntity.issuedBy = license?.issuedBy;
+    licenseEntity.validFrom = license?.validFrom;
+    licenseEntity.validTo = license?.validTo;
+    licenseEntity.userId = license?.userId;
+    licenseEntity.status = license?.status;
+    licenseEntity.comment = license?.comment;
+    licenseEntity.applicationId = license?.applicationId;
   
     licenseEntity.createdAt = license.createdAt
     licenseEntity.createdBy = license.createdBy

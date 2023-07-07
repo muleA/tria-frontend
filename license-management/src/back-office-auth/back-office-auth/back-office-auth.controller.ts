@@ -4,32 +4,40 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AccountResponse } from 'src/registration/useCases/account.response';
 import { EmployeeQueries } from 'src/registration/useCases/employee.commands.ts/employee.usecase.queries';
 import { BackOfficeAuthService } from './back-office-auth.service';
-import { LocalAuthGuard } from '../local-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
 
-// @Controller('back-office-auth')
-// @ApiTags('Back office Auth')
+@Controller('Mailer')
+@ApiTags('Mailer')
 export class BackOfficeAuthController {
     constructor(
         private backOfficeAuthService: BackOfficeAuthService,
-        private queries: EmployeeQueries
     ) {
     }
-    @UseGuards(LocalAuthGuard)
-    @UseGuards(AuthGuard('local'))
-    @Post('login')
-    async login(@Request() req): Promise<any> {
-        return this.backOfficeAuthService.generateToken(req.user)
+   
+    @Get('send-email/:emailAddress/:message/:subject')
+    async sendMail(
+        @Param('emailAddress')emailAddress:string,
+        @Param('message')message:string,
+        @Param('subject')subject:string
+        ) {
+             subject==''?'This from IFHRS System By Tria PlC':subject;
+             const html=''
+        return this.backOfficeAuthService.sendMail(emailAddress,message,subject,html)
     }
-    @Get("get-employee-by-email/:email")
-    @ApiOkResponse({ type: AccountResponse })
-    async getEmployeeByEmail(@Param('email') email: string) {
-        return await this.queries.getEmployeeByEmail(email)
-    }
-    @Get("get-account-by-email/:email")
-    @ApiOkResponse({ type: AccountResponse })
-    async getAccountByEmail(@Param('email') email: string) {
-        return await this.queries.getAccountByEmail(email)
+    
+    // @Post('login')
+    // async login(@Request() req): Promise<any> {
+    //     return this.backOfficeAuthService.generateToken(req.user)
+    // }
+    // @Get("get-employee-by-email/:email")
+    // @ApiOkResponse({ type: AccountResponse })
+    // async getEmployeeByEmail(@Param('email') email: string) {
+    //     return await this.queries.getEmployeeByEmail(email)
+    // }
+    // @Get("get-account-by-email/:email")
+    // @ApiOkResponse({ type: AccountResponse })
+    // async getAccountByEmail(@Param('email') email: string) {
+    //     return await this.queries.getAccountByEmail(email)
 
-    }
+    // }
 }

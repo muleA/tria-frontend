@@ -22,7 +22,8 @@ export class RoleQueries {
         return result.map((element) => RoleResponse.fromEntity(element))
     }
     async getRoleById(roleId: string): Promise<RoleResponse> {
-        const result = await this.roleRepository.findOneBy({ id: roleId })
+        const result = await this.roleRepository.findOne({ where:{id: roleId },relations:["rolePermission"]})
+        console.log(result)
         if (!result) {
             throw new NotFoundException(`Role with Id ${roleId} is not found`);
         }

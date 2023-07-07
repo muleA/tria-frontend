@@ -6,11 +6,11 @@ import { UserAcount } from "./account";
 import { LicenseApplicantEducation } from "./licenseApplicantEducation";
 import { LicenseApplicantExperience } from "./licenseApplicantExperience";
 import { LicenseApplication } from "./licenseApplication";
-
+import * as fs from 'fs';
 
 export class User {
   id: string;
-  accountId:string
+  accountId:string 
   firstName: string;
   lastName: string;
   middleName: string;
@@ -22,6 +22,8 @@ export class User {
   phone: string;
   email: string;
   houseNumber: string;
+  profilePicture: string;
+
   education: LicenseApplicantEducation[];
   expiriance: LicenseApplicantExperience[];
   certificate: Certificate[];
@@ -63,24 +65,60 @@ export class User {
     const existIndex = this.education.findIndex(
       (element) => element.id == educationId.trim()
     );
+    if(this.education[existIndex].file!==''){
+      fs.unlink(`./uploads/education/${this.education[existIndex].file}`, (error) => {
+        if (error) {
+          console.error('Error removing file:', error);
+        } else {
+          console.log('File removed successfully');
+        }
+      });
+    }
     this.education[existIndex].file = path;
   }
   async addExpiriance(path: string, expirianceId: string) {
     const existIndex = this.expiriance.findIndex(
       (element) => element.id.trim() == expirianceId.trim()
     );
+    if(this.expiriance[existIndex].file!==''){
+      fs.unlink(`./uploads/experience/${this.expiriance[existIndex].file}`, (error) => {
+        if (error) {
+          console.error('Error removing file:', error);
+        } else {
+          console.log('File removed successfully');
+        }
+      });
+    }
     this.expiriance[existIndex].file = path;
   }
   async addCertificate(path: string, certificateId: string) {
     const existIndex = this.certificate.findIndex(
       (element) => element.id.trim() == certificateId.trim()
     );
+    if(this.certificate[existIndex].file!==''){
+      fs.unlink(`./uploads/certificate/${this.certificate[existIndex].file}`, (error) => {
+        if (error) {
+          console.error('Error removing file:', error);
+        } else {
+          console.log('File removed successfully');
+        }
+      });
+    }
     this.certificate[existIndex].file = path;
   }
   async addDelegation(path: string, applicationId: string) {
     const existIndex = this.application.findIndex(
       (element) => element.id.trim() == applicationId.trim()
     );
+    if(this.application[existIndex].file!==''){
+      fs.unlink(`./uploads/delegation/${this.application[existIndex].file}`, (error) => {
+        if (error) {
+          console.error('Error removing file:', error);
+        } else {
+          console.log('File removed successfully');
+        }
+      });
+    }
     this.application[existIndex].file = path;
   }
 }

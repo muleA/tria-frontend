@@ -35,10 +35,21 @@ export class UserRepository implements IUserRepository {
         //  super()
     }
     async insertUser(user: User): Promise<User> {
-
         const userEntity = this.toUserEntity(user)
+        console.log('going to the application ',userEntity.applications)
         const result = await this.userRepository.save(userEntity)
-        
+        console.log('after saving user the application entity is  ',result.applications)
+        console.log('after saving user the application domain is  is  ',this.toUser(result).application)
+
+        return result ? this.toUser(result) : null;
+    }
+    async saveUser(user: UserEntity): Promise<User> {
+        // const userEntity = this.toUserEntity(user)
+        // console.log('going to the application ',userEntity.applications)
+        const result = await this.userRepository.save(user)
+        // console.log('after saving user the application entity is  ',result.applications)
+        // console.log('after saving user the application domain is  is  ',result.applications)
+
         return result ? this.toUser(result) : null;
     }
     async findAll(): Promise<User[]> {
@@ -52,7 +63,14 @@ export class UserRepository implements IUserRepository {
         } catch (error) {
             Logger.log(` User with Id ${id} is not found`)
         }
-
+    }
+    async finduserById(id: string): Promise<UserEntity> {
+        try {
+            const result=await this.userRepository.find({ where:{id: id},relations:['certificate','education','expiriance','applications','account','license'] })
+            return result[0]
+        } catch (error) {
+            Logger.log(` User with Id ${id} is not found`)
+        }
     }
     async updateUser(user: User): Promise<User> {
         const userEntity=this.toUserEntity(user)
@@ -104,6 +122,7 @@ export class UserRepository implements IUserRepository {
         userEntity.firstName = user.firstName
         userEntity.middleName = user.middleName
         userEntity.lastName = user.lastName
+        userEntity.lastName = user.lastName
         userEntity.gender = user.gender
         userEntity.email = user.email
         userEntity.phone = user.phone
@@ -111,6 +130,7 @@ export class UserRepository implements IUserRepository {
         userEntity.wereda = user.wereda
         userEntity.kebele = user.kebele
         userEntity.city = user.city
+        userEntity.profilePicture = user.profilePicture
         userEntity.houseNumber = user.houseNumber
         userEntity.createdAt = user.createdAt
         userEntity.createdBy = user.createdBy
@@ -134,11 +154,13 @@ export class UserRepository implements IUserRepository {
         userEntity.license = user?.license?.map((element) =>
             this.toLicenseEntity(element)
         )
-        
+        console.log(' after user is   changed to entity',userEntity.applications)
 
         return userEntity;
     }
     private toUser(userEntity: UserEntity): User {
+        // console.log('going to chnage to user domain   ',userEntity.applications)
+
         const user: User = new User()
         user.id = userEntity.id
         user.accountId = userEntity.accountId
@@ -152,6 +174,7 @@ export class UserRepository implements IUserRepository {
         user.wereda = userEntity.wereda
         user.kebele = userEntity.kebele
         user.city = userEntity.city
+        user.profilePicture = userEntity.profilePicture
         user.houseNumber = userEntity.houseNumber
         user.createdAt = userEntity.createdAt
         user.createdBy = userEntity.createdBy
@@ -163,15 +186,20 @@ export class UserRepository implements IUserRepository {
         user.certificate = userEntity?.certificate?.map((element) =>
             this.toCertificate(element)
         )
-        user.application = userEntity?.applications?.map((element) =>
-            this.toApplication(element)
-        )
         user.education = userEntity?.education?.map((element) =>
             this.toEducation(element)
         )
         user.expiriance = userEntity?.expiriance?.map((element) =>
             this.toExpiriance(element)
         )
+        // console.log(' user.applicationnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ',userEntity?.applications?.map((element) =>
+        //     this.toApplication(element)
+        // ))
+        user.application = userEntity?.applications?.map((element) =>
+            this.toApplication(element)
+        )
+        // console.log(' user.applicationnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ',user.application)
+        
         // user.license = userEntity?.license?.map((element) =>
         //     this.toLicense(element)
         // )
@@ -258,8 +286,10 @@ export class UserRepository implements IUserRepository {
         return certificate
     }
     private toApplicationEntity(application: LicenseApplication): LicenseApplicationEntity {
+        // console.log('application is going tobe changed to entity',application)
         const licenseApplicationEntity: LicenseApplicationEntity = new LicenseApplicationEntity()
         licenseApplicationEntity.id = application?.id
+        licenseApplicationEntity.userId = application?.userId
         licenseApplicationEntity.licenseId = application?.licenseId
         licenseApplicationEntity.appointmentDate = application?.appointmentDate
         licenseApplicationEntity.applierType = application.applierType
@@ -269,14 +299,25 @@ export class UserRepository implements IUserRepository {
         licenseApplicationEntity.file = application?.file
         licenseApplicationEntity.delegationFile = application?.delegationFile
         licenseApplicationEntity.comment = application?.comment
-         
-        licenseApplicationEntity.educationId = application.educationId
-        licenseApplicationEntity.experienceId = application.experienceId
+        licenseApplicationEntity.facilityName= application?.facilityName
+        licenseApplicationEntity.state= application?.state
+        licenseApplicationEntity.subCity= application?.subCity  
+        licenseApplicationEntity. woreda= application?.woreda  
+        licenseApplicationEntity.kebele= application?.kebele
+        licenseApplicationEntity.houseNumber= application?.houseNumber
+        licenseApplicationEntity.phone= application?.phone
+        licenseApplicationEntity.ownerName= application?.ownerName
+        licenseApplicationEntity.lastName= application?.lastName
+        licenseApplicationEntity.professionalName= application?.professionalName
+        licenseApplicationEntity.professionalLastName= application?.professionalLastName
+        licenseApplicationEntity.qualificationLevel= application?.qualificationLevel
+        licenseApplicationEntity.professionalLicenseNumber= application?.professionalLicenseNumber
+        licenseApplicationEntity.educationId = application?.educationId
+        licenseApplicationEntity.experienceId = application?.experienceId
         licenseApplicationEntity.certificateId = application?.certificateId
-
-        
         // licenseApplicationEntity.user = this.toUserEntity(application.user)
         // licenseApplicationEntity.license = this.toLicenseEntity(application?.license)
+        // console.log('application is have been changed to entity',licenseApplicationEntity)
         licenseApplicationEntity.createdAt = application.createdAt
         licenseApplicationEntity.createdBy = application.createdBy
         licenseApplicationEntity.deletedAt = application.deletedAt
@@ -287,8 +328,9 @@ export class UserRepository implements IUserRepository {
     }
     private toApplication(applicationEntity: LicenseApplicationEntity): LicenseApplication {
         const application: LicenseApplication = new LicenseApplication()
-
+        // console.log('fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff the application entity is ',applicationEntity)
         application.id = applicationEntity.id
+        application.userId = applicationEntity?.userId
         application.licenseId = applicationEntity?.licenseId
         application.appointmentDate = applicationEntity?.appointmentDate
         application.applicationType = applicationEntity.applicationType
@@ -299,10 +341,25 @@ export class UserRepository implements IUserRepository {
         application.delegationFile = applicationEntity?.delegationFile
         application.comment = applicationEntity?.comment
         // application.license = this.toLicense(applicationEntity.license)
-        application.educationId = application.educationId
-        application.experienceId = application.experienceId
-        application.certificateId = application?.certificateId
+        application.educationId = applicationEntity?.educationId
+        application.experienceId = applicationEntity?.experienceId
+        application.certificateId = applicationEntity?.certificateId
         // application.user = this.toUser(applicationEntity.user)
+        // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa the application domain is ',application)
+
+        application.facilityName= applicationEntity?.facilityName
+        application.state= applicationEntity?.state
+        application.subCity= applicationEntity?.subCity  
+        application. woreda= applicationEntity?.woreda  
+        application.kebele= applicationEntity?.kebele
+        application.houseNumber= applicationEntity?.houseNumber
+        application.phone= applicationEntity?.phone
+        application.ownerName= applicationEntity?.ownerName
+        application.lastName= applicationEntity?.lastName
+        application.professionalName= applicationEntity?.professionalName
+        application.professionalLastName= applicationEntity?.professionalLastName
+        application.qualificationLevel= applicationEntity?.qualificationLevel
+        application.professionalLicenseNumber= applicationEntity?.professionalLicenseNumber
 
         application.createdAt = applicationEntity.createdAt
         application.createdBy = applicationEntity.createdBy
@@ -310,6 +367,8 @@ export class UserRepository implements IUserRepository {
         application.deletedBy = applicationEntity.deletedBy
         application.updatedAt = applicationEntity.updatedAt
         application.updatedBy = applicationEntity.updatedBy
+        // console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr the application domain is ',application)
+        
         return application;
     }
     private toEducationEntity(education: LicenseApplicantEducation): LicenseApplicantEducationEntity {
@@ -403,6 +462,8 @@ export class UserRepository implements IUserRepository {
 
         const licenseEntity: LicenseEntity = new LicenseEntity()
         licenseEntity.id = license.id
+        licenseEntity.issuedBy = license.issuedBy
+        licenseEntity.licenseNumber = license.licenseNumber
         licenseEntity.validFrom = license.validFrom
         licenseEntity.validTo = license.validTo
         licenseEntity.userId = license.userId
@@ -423,6 +484,8 @@ export class UserRepository implements IUserRepository {
 
         const license: License = new License()
         license.id = licenseEntity?.id
+        license.licenseNumber = licenseEntity?.licenseNumber
+        license.issuedBy = licenseEntity?.issuedBy
         license.validFrom = licenseEntity.validFrom
         license.validTo = licenseEntity.validTo
         license.userId = licenseEntity.userId

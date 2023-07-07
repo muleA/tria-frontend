@@ -63,6 +63,8 @@ export class CreateUserCommand {
     @IsNotEmpty()
     @ApiProperty()
     email: string
+    @ApiProperty()
+    profilePicture: string
     // @ApiProperty()
     education: CreateLicenseApllicantEducationCommand[]
     // @ApiProperty()
@@ -99,6 +101,7 @@ export class CreateUserCommand {
         user.subCity = createUserCommand.subCity;
         user.houseNumber = createUserCommand.houseNumber;
         user.email = createUserCommand.email;
+        user.profilePicture = createUserCommand.profilePicture;
         user.certificate = createUserCommand.certificate?.map((item) =>
             CreateCertificateCommand.fromCommands(item)
         )
@@ -167,6 +170,8 @@ export class UpdateUserCommand {
     @IsNotEmpty()
     @ApiProperty()
     email: string
+    @ApiProperty()
+    profilePicture: string
     // @ApiProperty()
     education: CreateLicenseApllicantEducationCommand[]
     // @ApiProperty()
@@ -202,6 +207,7 @@ export class UpdateUserCommand {
         user.subCity = createUserCommand.subCity;
         user.houseNumber = createUserCommand.houseNumber;
         user.email = createUserCommand.email;
+        user.profilePicture = createUserCommand.profilePicture;
         user.certificate = createUserCommand?.certificate?.map((item) =>
             CreateCertificateCommand.fromCommands(item)
         )

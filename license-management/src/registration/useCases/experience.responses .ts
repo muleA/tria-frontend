@@ -36,22 +36,22 @@ export class ExperienceResponses  {
   static fromEntity(licenseApplicantexperienceEntity: LicenseApplicantexperienceEntity): ExperienceResponses {
     const experienceResponses: ExperienceResponses = new ExperienceResponses();
 
-    experienceResponses.id = licenseApplicantexperienceEntity.id;
-    experienceResponses.userId = licenseApplicantexperienceEntity.userId;
-    experienceResponses.tin = licenseApplicantexperienceEntity.tin;
-    experienceResponses.kebela = licenseApplicantexperienceEntity.kebela;
-    experienceResponses.organizationName = licenseApplicantexperienceEntity.organizationName;
-    experienceResponses.woreda = licenseApplicantexperienceEntity.woreda;
-    experienceResponses.subCity = licenseApplicantexperienceEntity.subCity;
+    experienceResponses.id = licenseApplicantexperienceEntity?.id;
+    experienceResponses.userId = licenseApplicantexperienceEntity?.userId;
+    experienceResponses.tin = licenseApplicantexperienceEntity?.tin;
+    experienceResponses.kebela = licenseApplicantexperienceEntity?.kebela;
+    experienceResponses.organizationName = licenseApplicantexperienceEntity?.organizationName;
+    experienceResponses.woreda = licenseApplicantexperienceEntity?.woreda;
+    experienceResponses.subCity = licenseApplicantexperienceEntity?.subCity;
     experienceResponses.file = licenseApplicantexperienceEntity?.file;
 
 
-    experienceResponses.createdAt=licenseApplicantexperienceEntity.createdAt
-    experienceResponses.createdBy=licenseApplicantexperienceEntity.createdBy
-    experienceResponses.updatedAt=licenseApplicantexperienceEntity.updatedAt
-    experienceResponses.updatedBy=licenseApplicantexperienceEntity.updatedBy
-    experienceResponses.deletedAt=licenseApplicantexperienceEntity.deletedAt
-    experienceResponses.deletedBy=licenseApplicantexperienceEntity.deletedBy
+    experienceResponses.createdAt=licenseApplicantexperienceEntity?.createdAt
+    experienceResponses.createdBy=licenseApplicantexperienceEntity?.createdBy
+    experienceResponses.updatedAt=licenseApplicantexperienceEntity?.updatedAt
+    experienceResponses.updatedBy=licenseApplicantexperienceEntity?.updatedBy
+    experienceResponses.deletedAt=licenseApplicantexperienceEntity?.deletedAt
+    experienceResponses.deletedBy=licenseApplicantexperienceEntity?.deletedBy
     return experienceResponses;
   }
   static fromDomain(licenseApplicantExperience: LicenseApplicantExperience): ExperienceResponses {

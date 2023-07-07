@@ -18,8 +18,8 @@ export class AuthService {
 
     async validateUserCreds(email: string, password: string): Promise<any> {
         const account = await this.userService.getAccountByEmail(email)
-        console.log('the Account is ', account)
-        if (account.accountType == 'employee') {
+        // console.log('the Account is ', account)
+        if (account?.accountType == 'employee' || account?.accountType == 'Admin') {
             const user = await this.employeeService.getEmployeeByEmail(email)
 
             if (!user) { throw new NotFoundException(); }
@@ -27,7 +27,7 @@ export class AuthService {
             if (!(await bcrypt.compare(password, account.password))) { throw new UnauthorizedException(); }
             user.type = 'employee'
             return user
-        } else if (account.accountType === 'user') {
+        } else if (account?.accountType === 'user') {
             const user = await this.userService.getUserByEmail(email)
 
             if (!user) { throw new NotFoundException(); }
@@ -36,11 +36,6 @@ export class AuthService {
             user.type = 'user'
             return user
         }
-
-
-
-
-
     }
 
 
@@ -50,7 +45,11 @@ export class AuthService {
             return {
                 access_token: this.jwtService.sign({
                     name: user.userName,
+                    firstName: user.firstName,
+                    middleName: user.middleName,
+                    lastName: user.lastName,
                     account: user.id,
+                    accountType:user.type,
                     sub: user.userId,
                     createdAt: user.createdAt,
                     accountId: user.accountId,
@@ -58,25 +57,25 @@ export class AuthService {
                     userName: user.email
                 })
             }
-        } else if (user.type == 'employee') {
-            const employeeRoles = user.employeeRole
+        } else if (user.type == 'employee'||user.type == 'Admin') {
+            const employeeRoles = user?.employeeRole
             return {
                 access_token: this.jwtService.sign({
                     name: user.userName,
                     firstName: user.firstName,
+                    middleName: user.middleName,
                     lastName: user.lastName,
                     createdAt: user.createdAt,
+                    accountType:user.type,
                     accountId: user.accountId,
                     employeeId: user.id,
                     sub: user.id,
                     userName: user.email,
-                    EmployeeRoles: employeeRoles
+                    EmployeeRoles: employeeRoles,
                 })
             }
-        } else {
+        } else{
             throw new NotFoundException(`the userType ${user.type} is not valid `);
-
         }
-
     }
 }

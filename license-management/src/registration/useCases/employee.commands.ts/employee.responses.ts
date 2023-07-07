@@ -43,7 +43,7 @@ export class EmployeeResponse  extends Common{
         employeeResponse.id = employeeEntity.id;
         employeeResponse.accountId = employeeEntity.accountId;
         employeeResponse.firstName = employeeEntity.firstName;
-        employeeResponse.firstName = employeeEntity.firstName;
+        employeeResponse.middleName = employeeEntity.middleName;
         employeeResponse.lastName = employeeEntity.lastName;
         employeeResponse.gender = employeeEntity.gender;
         employeeResponse.wereda = employeeEntity.wereda;
@@ -72,7 +72,7 @@ export class EmployeeResponse  extends Common{
         employeeResponse.id = employee.id;
         employeeResponse.accountId = employee.accountId;
         employeeResponse.firstName = employee.firstName;
-        employeeResponse.firstName = employee.firstName;
+        employeeResponse.middleName = employee.middleName;
         employeeResponse.lastName = employee.lastName;
         employeeResponse.gender = employee.gender;
         employeeResponse.wereda = employee.wereda;

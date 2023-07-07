@@ -46,6 +46,7 @@ export class EmployeesController {
     async getArchivedEmployees() {
         return await this.queries.getArchivedEmployees()
     }
+    
     @Get("get-archived-employeesById/:employeeId")
     @ApiOkResponse({ type: EmployeeResponse })
     async getArchivedEmployeeById(@Param('employeeId') employeeId: string) {
@@ -62,7 +63,6 @@ export class EmployeesController {
     async restoreEmployeeById(@Param('employeeId') employeeId: string) {
         return await this.commands.unArchiveEmployee(employeeId)
     }
-
     @Post("delete-employee/:employeeId")
     @ApiOkResponse({ type: Boolean })
     async deleteEmployeeById(@Param('employeeId') employeeId: string) {
@@ -89,9 +89,18 @@ export class EmployeesController {
   "createdAt": "2023-05-29T09:53:55.628Z"
 }
      */
-    @Get("get-role-by-employeesId/:employeeId")
+    @Get("get-role-by-employeeId/:employeeId")
     @ApiOkResponse({ type: EmployeeResponse })
     async getRoleByEmployeeId(@Param('employeeId') employeeId: string) {
+        console.log(employeeId)
+        // const result:any=await this.queries.getEmployeeRoles(employeeId)[0].EmployeeRoleResponse;
+        // result.EmployeeRoleResponse.name=result[0].emproleName;
+        // console.log(await this.queries.getEmployeeRoles(employeeId))
+        return await this.queries.getEmployeeRoles(employeeId)
+    }
+    @Get("get-role-by-employeefffffsId/:employeeId")
+    @ApiOkResponse({ type: EmployeeResponse })
+    async getRoleByEmployefffffffeId(@Param('employeeId') employeeId: string,@Body() addRoleToEmployeeCommand: AddRoleToEmployeeCommand[]) {
         console.log(employeeId)
         return await this.queries.getEmployeeRoles(employeeId)
     }

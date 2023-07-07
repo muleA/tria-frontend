@@ -37,6 +37,8 @@ export class RoleResponse extends Common {
     roleResponse.description = roleEntity.description;
     roleResponse.isDefault = roleEntity.isDefault;
     roleResponse.employeeRole = roleEntity?.employeeRole?.map((element)=>EmployeeRoleResponse.fromEntity(element));
+    console.log('ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
+    roleResponse.rolePermission = roleEntity.rolePermission!==null?roleEntity?.rolePermission?.map((element)=>RolePermissionResponse.fromEntity(element)):null;
 
     roleResponse.createdAt = roleEntity?.createdAt
     roleResponse.createdBy = roleEntity?.createdBy
