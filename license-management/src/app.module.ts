@@ -46,7 +46,7 @@ import { TaskCheckListEntity } from './Task/task/persistance/taskchecklist.entit
       port: 5432,
       username: 'postgres',
       password: 'dcba@1234',
-      database: 'postgres',
+      database: 'IFHCRS',
       entities: [AccountEntity,
         UserEntity,
         LicenseApplicantEducationEntity,
