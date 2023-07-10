@@ -59,11 +59,6 @@ export class UserController {
     async getArchivedUser() {
         return await this.queries.getArchivedUser()
     }
-    @Get("get-archived-users-by-Id/:userId")
-    @ApiOkResponse({ type: UserResponse })
-    async getArchivedUserById(@Param('userId')userId:string) {
-        return await this.queries.getArchivedUserById(userId)
-    }
     /**
      * a method used to create user   
      * @param createUserCommand 
@@ -131,11 +126,6 @@ export class UserController {
     async getArchivedEducations(@Param('userId') userId: string) {
         return await this.queries.getArchivedEducations(userId)
     }
-    @Get("get-archived-educationby-educationId/:educationId")
-    @ApiOkResponse({ type: EducationResponse })
-    async getArchivedEducationById(@Param('educationId') educationId: string) {
-        return await this.queries.getArchivedEducationById(educationId)
-    }
     @Get("get-education-by-userId/:userId")
     @ApiOkResponse({ type: EducationResponse })
     async getEducationByUserId(@Param('userId') userId: string) {
@@ -185,11 +175,6 @@ export class UserController {
     async getArchivedCertificateByUserID(@Param('userId') userId: string) {
         return await this.queries.getArchivedCertificate(userId)
     }
-    @Get("get-archived-certificate-by-certificateId/:certificateId")
-    @ApiOkResponse({ type: CertificateResponse })
-    async getArchivedCertificateBycertificateId(@Param('certificateId') certificateId: string) {
-        return await this.queries.getArchivedCertificateById(certificateId)
-    }
     @Get("get-certificate-by-userId/:userId")
     @ApiOkResponse({ type: CertificateResponse })
     async getCertificateByUserId(@Param('userId') userId: string) {
@@ -238,11 +223,6 @@ export class UserController {
     @ApiOkResponse({ type: ExperienceResponses })
     async getArchivedExperienceByUserID(@Param('userId') userId: string) {
         return await this.queries.getArchivedExpiriance(userId)
-    }
-    @Get("get-archived-experience-by-experienceId/:experienceId")
-    @ApiOkResponse({ type: ExperienceResponses })
-    async getArchivedExperienceByexperienceId(@Param('experienceId') experienceId: string) {
-        return await this.queries.getArchivedExpirianceById(experienceId)
     }
     @Get("get-experience-by-userId/:userId")
     @ApiOkResponse({ type: ExperienceResponses })
@@ -302,11 +282,6 @@ export class UserController {
     @ApiOkResponse({ type: AccountResponse })
     async getAccountByUserId(@Param('accountId') accountId: string) {
         return await this.queries.getAccountByUserId(accountId)
-    }
-    @Get("get-account-by-accountId/:accountId")
-    @ApiOkResponse({ type: AccountResponse })
-    async getAccountByAccountId(@Param('accountId') accountId: string) {
-        return await this.queries.getAccountByAccountId(accountId)
     }
     @Get("get-accounts-by-credentials/:userName/:password")
     @ApiOkResponse({ type: AccountResponse })
@@ -394,7 +369,7 @@ export class UserController {
                 filename: (req, file, callback) => {
                     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
                     // const ext = extname(file.originalname);
-                    const filename = `${uniqueSuffix}-${file.originalname}`;
+                    const filename = `${file.originalname}-${uniqueSuffix}`;
                     callback(null, filename)
                 },
             })
@@ -435,7 +410,7 @@ export class UserController {
                 filename: (req, file, callback) => {
                     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
                     // const ext = extname(file.originalname);
-                    const filename = `${uniqueSuffix}-${file.originalname}`;
+                    const filename = `${file.originalname}-${uniqueSuffix}`;
                     callback(null, filename)
                 },
             })
@@ -518,11 +493,6 @@ export class UserController {
         @Param('userId') userId: string) {
         return await this.commands.createApplication(createApplicationCommand, userId)
     }
-    @Post("delete-application/:applicationId")
-    @ApiOkResponse({ type: Boolean })
-    async deleteApplicationById(@Param('applicationId') applicationId: string) {
-        return await this.commands.deleteApplication(applicationId)
-    }
     @Post("update-application")
     @ApiOkResponse({ type: ApplicationResponse })
     async updateApplication(
@@ -554,7 +524,6 @@ export class UserController {
     @Get("get-application-by-userId/:userId")
     @ApiOkResponse({ type: ApplicationResponse })
     async getApplicationByUserId(@Param('userId') userId: string) {
-        console.log('I am on the controller')
         return await this.queries.getApplicationByUserId(userId)
     }
     @Get("get-application-by-userId/:userId/:status")
@@ -569,21 +538,11 @@ export class UserController {
 
         return await this.queries.getApplicationDetail(applicationId)
     }
-    @Get("get-application-with-license-by-userId/:userId")
-    @ApiOkResponse({ type: ApplicationResponse })
-    async getApplicationById(@Param('userId') userId: string) {
-        console.log('applicationId', userId)
-
-        return await this.queries.getApplicationWithLicenseByUserId(userId)
-    }
     @Get("get-application-by-status/:status")
     @ApiOkResponse({ type: ApplicationResponse })
     async getApplicationByStatus(@Param('status') status: string) {
         return await this.queries.getApplicationByStatus(status)
     }
-   /**
-    * this is a method used to change the status of the Application
-    */
     @Post("change-application-status-By-applicationId/:applicationId")
     @ApiOkResponse({ type: ApplicationResponse })
     async approveApplicationByUserID(
@@ -604,11 +563,6 @@ export class UserController {
     async getApplications() {
         return await this.queries.getApplications()
     }
-    @Get("get-submited-applications")
-    @ApiOkResponse({ type: ApplicationResponse })
-    async getSubmitedApplications() {
-        return await this.queries.getSubmitedApplications()
-    }
     // License 
     @Post("add-licenseToApplication/:applicationId")
     @ApiOkResponse({ type: LicenseResponse })
@@ -620,14 +574,7 @@ export class UserController {
     @Get("get-license-by-licenseId/:licenseId")
     @ApiOkResponse({ type: ApplicationResponse })
     async getLicenseById(@Param('licenseId') licenseId: string) {
-        console.log(licenseId)
         return await this.queries.getLicenseById(licenseId)
-    }
-    @Get("get-license-by-licenseNumber/:licenseNumber")
-    @ApiOkResponse({ type: ApplicationResponse })
-    async getLicenseBylicenseNumber(@Param('licenseNumber') licenseNumber: string) {
-        console.log(licenseNumber)
-        return await this.queries.getLicenseBylicenseNumber(licenseNumber)
     }
     @Get("get-license-by-applicationId/:applicationId")
     @ApiOkResponse({ type: ApplicationResponse })
@@ -643,15 +590,6 @@ export class UserController {
     @ApiOkResponse({ type: LicenseResponse })
     async getLicenseByUserId(@Param('userId') userId: string) {
         return await this.queries.getLicenseByUserId(userId)
-    }
-    // get license by UserId and Status
-    @Get("get-license-by-userId-status/:userId/:status")
-    @ApiOkResponse({ type: LicenseResponse })
-    async getLicenseByUserIdStatus(
-        @Param('userId') userId: string,
-        @Param('status') status: string
-        ) {
-        return await this.queries.getLicenseByUserIdStatus(userId,status)
     }
     @Get("get-licenses")
     @ApiOkResponse({ type: LicenseResponse })
@@ -787,14 +725,13 @@ export class UserController {
                 filename: (req, file, callback) => {
                     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
                     // const ext = extname(file.originalname);
-                    const filename = `${uniqueSuffix}-${file.originalname}`;
+                    const filename = `${file.originalname}-${uniqueSuffix}`;
                     callback(null, filename)
                 },
             })
             // limits: { fileSize: Math.pow(2024, 2) },
         })
     )
-
     async addProfilePicture(
         @Param('applicationId') applicationId: string,
         @UploadedFile() attachmentUrl: Express.Multer.File,
@@ -818,56 +755,5 @@ export class UserController {
         // return res.sendFile(fileName, { root: "./uploads/profilePicture" });
         console.log('the fileName is :', fileName)
         res.download(`./uploads/profilePicture/${fileName}`)
-    }
-
-    // User profile picture
-
-    @Post("add-user-profile-picture/:userId")
-    @ApiOkResponse({ type: ApplicationResponse })
-    @ApiConsumes("multipart/form-data")
-    @ApiBody({
-        schema: {
-            type: "object",
-            properties: {
-                attachmentUrl: {
-                    type: "string",
-                    format: "binary",
-                },
-            },
-        },
-    })
-    @UseInterceptors(
-        FileInterceptor("attachmentUrl", {
-            storage: diskStorage({
-                destination: './uploads/userProfilePicture',
-                filename: (req, file, callback) => {
-                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-                    // const ext = extname(file.originalname);
-                    const filename = `${uniqueSuffix}-${file.originalname}`;
-                    callback(null, filename)
-                },
-            })
-            // limits: { fileSize: Math.pow(2024, 2) },
-        })
-    )
-    async addUserProfilePicture(
-        @Param('userId') userId: string,
-        @UploadedFile() attachmentUrl: Express.Multer.File,
-    ): Promise<any> {
-        if (attachmentUrl) {
-            const result = await this.commands.uploadUserProfilePicture(String(attachmentUrl.filename).trim(), userId);
-            return result
-        }
-    }
-
-    @Get('get-user-profile-picture-by-userId/:userId')
-    async getUserProfilePictureByUserId(
-        @Param("userId") userId: string,
-        @Res() res
-    ) {
-        const fileName = (await this.queries.getUserByUserId(userId)).profilePicture
-        // return res.sendFile(fileName, { root: "./uploads/profilePicture" });
-        console.log('the fileName is :', fileName)
-        res.download(`./uploads/userProfilePicture/${fileName}`)
     }
 }
