@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Drawer, List } from "antd";
-import { filterMenusByPermissions, Menu } from "../../models/menu";
+import { List } from "antd";
+import { useEffect, useMemo, useState } from "react";
+import { Menu, filterMenusByPermissions } from "../../models/menu";
 import { useAuth } from "../auth/use-auth";
 import SidebarItem from "./sidebar-item";
 
@@ -14,7 +14,8 @@ const Sidebar = (props:{menus:Menu[]}): JSX.Element => {
   const permittedMenu = useMemo(() => {
 
 const userPermissions =
-    session?.userInfo?.EmployeeRoles?.flatMap((role: { role: { rolePermission: any; }; }) => role?.role?.rolePermission ?? []).flat().map(
+    session?.userInfo?.EmployeeRoles?.flatMap((role: { role: { rolePermission: any; }; }) => 
+    role?.role?.rolePermission ?? []).flat().map(
         (permission: { permissionName: any; }) => permission.permissionName,
     ) ?? [];
 
@@ -24,12 +25,12 @@ console.log(userPermissions);
   }, [props?.menus, session]);
 
   useEffect(() => {
-    setVisibleMenu(permittedMenu);
+    setVisibleMenu(props?.menus);
   }, [permittedMenu]);
 
   return (
-    <List dataSource={visibleMenu}   >
-    {visibleMenu?.map((menuItem, index) => (
+    <List dataSource={props?.menus}   >
+    {props?.menus?.map((menuItem, index) => (
       <SidebarItem key={`${index}-${menuItem.name}`} menu={menuItem} mergedPath={""} />
     ))}
   </List>

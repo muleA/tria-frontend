@@ -1,0 +1,30 @@
+import { CoordinateExtent, Position, XYPosition } from "reactflow";
+
+export type Node<T, U extends string> = {
+  id: string;
+  position: XYPosition;
+  data: T;
+  type?: U | "default" | "input" | "output" | "group";
+  sourcePosition?: Position;
+  targetPosition?: Position;
+  hidden?: boolean;
+  selected?: boolean;
+  dragging?: boolean;
+  draggable?: boolean;
+  selectable?: boolean;
+  connectable?: boolean;
+  resizing?: boolean;
+  deletable?: boolean;
+  dragHandle?: string;
+  width?: number | null;
+  height?: number | null;
+  parentNode?: string;
+  zIndex?: number;
+  extent?: "parent" | CoordinateExtent;
+  expandParent?: boolean;
+  positionAbsolute?: XYPosition;
+  ariaLabel?: string;
+  focusable?: boolean;
+  style?: React.CSSProperties;
+  className?: string;
+};

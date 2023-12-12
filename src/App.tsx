@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import "./global.css";
-import ErrorBoundary from "./shared/error-boundary";
+import { I18nextProvider } from 'react-i18next';
 import { Provider } from "react-redux";
-import { store } from "./store/app.store";
-import { useAuth } from "./shared/auth/use-auth";
-import HomePage from "./pages/home";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import BackOfficeLayoutWrapper from "./components/back-office-layout";
 import { Dashboard } from "./components/back-office/dashboard";
 import PortalNavigation from "./components/portal/home-navbar";
-import { I18nextProvider } from 'react-i18next';
+import "./global.css";
+import HomePage from "./pages/home";
+import { useAuth } from "./shared/auth/use-auth";
+import ErrorBoundary from "./shared/error-boundary";
 import i18n from './shared/locals/i18n';
-import { useAppSelector } from "./store/app-store-hook";
 import AlertDialogSlide from "./shared/utilities/error-dialogue/error-dialogue";
+import { useAppSelector } from "./store/app-store-hook";
+import { store } from "./store/app.store";
 const App = () => {
   const { session } = useAuth();
   const location = useLocation();

@@ -1,11 +1,9 @@
-import CounterCard from "./Components/counter-card";
-import TableCard from './Components/table-card';
-import ProgressChartCard from './Components/progress-chart-card';
-import { useGetApplicationUserIdQuery, useGetLicenseByUserIdAndStatusQuery, useGetLicenseByUserIdQuery } from "../../portal.query";
-import { useAuth } from "../../../shared/auth/use-auth";
 import { AppstoreOutlined, CheckOutlined, CloseOutlined, FileDoneOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
 import { Card } from "antd";
-import AlertDialogSlide from "../../../shared/utilities/error-dialogue/error-dialogue";
+import { useAuth } from "../../../shared/auth/use-auth";
+import { useGetApplicationUserIdQuery, useGetLicenseByUserIdAndStatusQuery, useGetLicenseByUserIdQuery } from "../../portal.query";
+import ProgressChartCard from './Components/progress-chart-card';
+import TableCard from './Components/table-card';
 export default function HomePage(){
   const {session}=useAuth()
   const {data:totalLicense,isLoading:totalLicenseLoading}=useGetLicenseByUserIdQuery(session?.userInfo?.userId)

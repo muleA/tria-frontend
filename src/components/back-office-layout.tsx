@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import * as Icon from "@ant-design/icons";
 import {
   CaretDownOutlined,
   DoubleLeftOutlined,
@@ -8,49 +9,49 @@ import {
 } from "@ant-design/icons";
 import { Breadcrumb, Dropdown, Layout, Menu } from "antd";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
-import { useAuth } from "../shared/auth/use-auth";
-import { User } from "../pages/back-office/user";
-import { UserDetail } from "./back-office/user/detail";
-import Sidebar from "../shared/shell/sidebar";
-import { Roles } from "./back-office/role/role";
-import DetailRole from "./back-office/role/detail.";
-import NewRole from "./back-office/role/new-role";
-import { PermissionLists } from "../pages/back-office/permissions/permission";
-import DetailPermissions from "./back-office/permission/detail.";
-import NewPermission from "./back-office/permission/new-permissions";
+import { ApplicationDetailPage } from "../pages/back-office/application/detail";
 import { EmployeeDetailsPage } from "../pages/back-office/employee/detail";
 import { EmployeesPage } from "../pages/back-office/employee/employees";
-import { NewEmployee } from "./back-office/employee/new-employee";
-import { License } from "./back-office/license/license";
-import { ApplicationDetailPage } from "../pages/back-office/application/detail";
-import { ArchivedUsers } from "./back-office/archives/user/archived-user";
-import { ArchivedUserDetail } from "./back-office/archives/user/archived-user-detail";
-import { ArchivedEmployees } from "./back-office/archives/employee/archived-employees";
-import { ArchivedEmployeeDetails } from "./back-office/archives/employee/archived-employee-detail";
-import { ArchivedApplication } from "./back-office/archives/application/archived-application";
-import ArchivedApplicationDetail from "./back-office/archives/application/archived-application-detail";
-import { BackOfficeApplications } from "./back-office/application/application";
-import { _BackOfficeApplications } from "./back-office/application/_application";
-import * as Icon from "@ant-design/icons";
-import { useTranslation } from "react-i18next";
+import { PermissionLists } from "../pages/back-office/permissions/permission";
+import { User } from "../pages/back-office/user";
+import RoutePermissionGuard from "../shared/auth/route-permission-guard";
+import { useAuth } from "../shared/auth/use-auth";
+import DashboardGreeting from "../shared/dashboard-welcome";
+import TimeCounter from "../shared/live-timer";
 import {
   ViewApplications,
-  _ViewApplications,
   ViewArchives,
   ViewDashboard,
   ViewEmployee,
   ViewLicense,
   ViewRole,
   ViewUser,
+  _ViewApplications,
   viewPermission,
 } from "../shared/shell/permissions-list";
-import RoutePermissionGuard from "../shared/auth/route-permission-guard";
-import LicenseDetail from "./back-office/license/detail.";
+import Sidebar from "../shared/shell/sidebar";
+import { _BackOfficeApplications } from "./back-office/application/_application";
 import { SubmittedApplicationDetail } from "./back-office/application/_application-detail";
-import TimeCounter from "../shared/live-timer";
-import DashboardGreeting from "../shared/dashboard-welcome";
-import WorkFlowPage from "./back-office/work-flow/work-flow-page";
+import { BackOfficeApplications } from "./back-office/application/application";
+import { ArchivedApplication } from "./back-office/archives/application/archived-application";
+import ArchivedApplicationDetail from "./back-office/archives/application/archived-application-detail";
+import { ArchivedEmployeeDetails } from "./back-office/archives/employee/archived-employee-detail";
+import { ArchivedEmployees } from "./back-office/archives/employee/archived-employees";
+import { ArchivedUsers } from "./back-office/archives/user/archived-user";
+import { ArchivedUserDetail } from "./back-office/archives/user/archived-user-detail";
+import { NewEmployee } from "./back-office/employee/new-employee";
+import LicenseDetail from "./back-office/license/detail.";
+import { License } from "./back-office/license/license";
+import DetailPermissions from "./back-office/permission/detail.";
+import NewPermission from "./back-office/permission/new-permissions";
+import DetailRole from "./back-office/role/detail.";
+import NewRole from "./back-office/role/new-role";
+import { Roles } from "./back-office/role/role";
+import { UserDetail } from "./back-office/user/detail";
+import FormBuilder from "./back-office/work-flow/form-builder";
+import ReactFlowLibrary from "./back-office/work-flow/work-flow";
 
 const { Sider, Content, Footer } = Layout;
 
@@ -430,7 +431,16 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
                 <Route
                 path={`/settings/design-work-flow`}
                 element={
-                    <WorkFlowPage />
+                    <ReactFlowLibrary />
+                }
+              />
+
+<Route
+                path={`/settings/form-builder`}
+                element={
+                    <FormBuilder id={""} label={""} type={""} onLabelChange={function (id: string, label: string): void {
+                    throw new Error("Function not implemented.");
+                  } } />
                 }
               />
               <Route

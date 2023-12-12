@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "./use-auth";
 import { SYSTEM_ROOT_PERMISSION } from "../../models/permission";
+import { useAuth } from "./use-auth";
 
 interface ProtectedRouteProps {
   requiredPermissions: string[];

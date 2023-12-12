@@ -5,12 +5,10 @@ import DnDFlow from "./sidebar-wrapper";
 
 export default function WorkFlowPage() {
   return (
-    <>
       <DndProvider backend={HTML5Backend}>
         <ReactFlowProvider>
           <DnDFlow />
         </ReactFlowProvider>
       </DndProvider>
-    </>
   );
 }

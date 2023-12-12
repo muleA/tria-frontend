@@ -1,14 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { edgesReducer, eventsReducer, handleReducer, nodesReducer, taskReducer, validationReducer } from '../components/back-office/work-flow';
+import { GlobalErrorReducer } from '../shared/utilities/error-dialogue/error-slice';
 import { apiSlice } from './app.api';
 import { authReducer } from "./auth-slice";
-import { GlobalErrorReducer } from '../shared/utilities/error-dialogue/error-slice';
-
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     globalError: GlobalErrorReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    task: taskReducer,
+    event: eventsReducer,
+    handle: handleReducer,
+    validation: validationReducer,
+    nodes: nodesReducer,
+    edges: edgesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
