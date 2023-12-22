@@ -1,5 +1,4 @@
 import { CoordinateExtent, Position, XYPosition } from "reactflow";
-
 export type Node<T, U extends string> = {
   id: string;
   position: XYPosition;

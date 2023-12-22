@@ -31,7 +31,7 @@ console.log("session",session)
         navigate(`/dashboard`);
       }
     }
-  }, [session, location.pathname, navigate]);
+  }, [session, location.pathname, navigate]);  
   return (
     <I18nextProvider i18n={i18n}>
 
@@ -41,8 +41,8 @@ console.log("session",session)
 
         <Routes>
           <Route path="/" element={<HomePage />} />
-          {session !== null &&
-            session?.userInfo?.accountType!=='user' && (
+           {session !== null &&
+            session?.userInfo?.accountType!=='user' && (   
               <><Route
               path="*"
               element={<React.Fragment>
@@ -53,7 +53,7 @@ console.log("session",session)
                 </BackOfficeLayoutWrapper>
               </React.Fragment>} /></>
             )}
-          {session !== null &&
+            {session !== null &&
             session?.userInfo?.accountType ==='user' && (
               <Route
                 path="*"

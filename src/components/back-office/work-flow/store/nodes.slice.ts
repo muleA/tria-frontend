@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Node as ReactFlowNode } from "reactflow";
-
 interface NodesState {
   nodes: ReactFlowNode[];
   selectedNode: string;

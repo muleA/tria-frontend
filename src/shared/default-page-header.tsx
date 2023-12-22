@@ -1,16 +1,13 @@
-import { PropsWithChildren } from "react";
-import { useNavigate } from "react-router-dom";
+import { ArrowBack } from "@mui/icons-material";
 import {
   Box,
   Button,
   ButtonProps,
   Grid,
-  Select,
-  Typography,
+  Typography
 } from "@mui/material";
-import { ArrowBack } from "@mui/icons-material";
-import IsPermitted from "./auth/is-permitted";
-import NumberWithCommas from "./utilities/number-commas";
+import { PropsWithChildren } from "react";
+import { useNavigate } from "react-router-dom";
 
 export type DefaultPageHeaderProps = {
   title?: string;
@@ -86,9 +83,9 @@ export const DefaultPageHeader = (
           {props.outlinedButtonProps && (
             <Grid item>
               <Button
-                style={{ textTransform: "none" }}
+                style={{ textTransform: "none",backgroundColor:"green" }}
                 size="large"
-                variant="outlined"
+                variant="contained"
                 {...props.outlinedButtonProps}
               >
                 {props.outlinedButtonProps.children}

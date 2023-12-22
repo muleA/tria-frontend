@@ -7,8 +7,7 @@ interface State {
 }
 
 const initialState: State = {
-  edges: //reformattedEdges,
-    [],
+  edges:[],
   hovered: false,
 };
 
@@ -27,7 +26,7 @@ export const edgesSlice = createSlice({
 
       const newEdge = {
         ...action.payload,
-        animated: animated !== undefined ? animated : false,
+        animated: animated !== undefined ? animated : true,
         style: style !== "" ? style : { stroke: 'black' },
         type: type !== undefined ? type : 'step',
         label: label !== undefined ? label : '',

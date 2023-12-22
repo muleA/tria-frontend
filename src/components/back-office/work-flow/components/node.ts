@@ -1,5 +1,5 @@
 export const nodesList = [
-    {
+  /*  {
         id: 2,
         label: "Go to end",
         type: "end"
@@ -175,11 +175,41 @@ export const nodesList = [
         type: "formBased"
     },
     
-];
+ */
 
+  
+    {
+      id: 3,
 
-// {
-//     id: 4,
-//     label: "Review compliance with service ...",
-//     type: "review",
-// },
+      label: "Submission of New License Registration Request",
+
+      type: "formBased",
+    },
+
+    {
+      id: 4,
+
+      label: "Approval of License Registration Request By TL",
+
+      type: "confirmation",
+    },
+
+    {
+      id: 5,
+      label: "Approval of New License Registration by DR",
+      type: "confirmation",
+    },
+
+    {
+      id: 6,
+      label: "Final Approval of New License Registration by Deputy",
+      type: "confirmation",
+    },
+
+    {
+      id: 7,
+      label: "Generate License Registration Certificate",
+      type: "notification"
+    },
+  ]
+

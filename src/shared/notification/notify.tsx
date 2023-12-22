@@ -1,17 +1,14 @@
-import {createRoot } from "react-dom/client";
-import NotificationComponent from "./notification";
-export const Notify = (
-  type: 'success' | 'error' | 'warning' | 'info',
-  message: string
-)=>{
-  const notificationContainer = document?.createElement('div');
-  notificationContainer.id = 'notification-container';
-  document?.body?.appendChild(notificationContainer);
-  createRoot(notificationContainer).render(
-    <NotificationComponent
-      type={type}
-      message={message}
-      container={notificationContainer}
-    />
-  );
+// notify.tsx
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+export const Notify = (type: 'success' | 'error' | 'warning' | 'info', message: string): void => {
+  // Display toast using react-toastify
+  toast[type](message, {
+    position: 'bottom-right',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  });
 };

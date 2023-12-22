@@ -17,6 +17,13 @@ const backOfficeApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["user"],
     }),
+    getServiceDetail: builder.query<any, any>({
+      query: (id) => ({
+        url: `${backOfficeEndPoints.getServiceDetail}/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Service"],
+    }),
     getRoles: builder.query<any, void>({
       query: () => ({
         url: backOfficeEndPoints.getRoles,
@@ -47,11 +54,32 @@ const backOfficeApi = apiSlice.injectEndpoints({
       providesTags: ["user"],
     }),
     getTasks: builder.query<any, void>({
-      query: () => ({
-        url: backOfficeEndPoints.getTasks,
+      query: (Id) => ({
+        url: `${backOfficeEndPoints.getTasks}${Id}`,
         method: "GET",
       }),
       providesTags: ["Task"],
+    }),
+    getSavedWorkFlow: builder.query<any, any>({
+      query: (Id) => ({
+        url: `${backOfficeEndPoints.getSavedWorkFlow}${Id}`,
+        method: "GET",
+      }),
+      providesTags: ["Service"],
+    }),
+    getServices: builder.query<any, void>({
+      query: () => ({
+        url: backOfficeEndPoints.getServices,
+        method: "GET",
+      }),
+      providesTags: ["Service"],
+    }),
+    getBussinessProcess: builder.query<any, void>({
+      query: () => ({
+        url: backOfficeEndPoints.getBussinessProcess,
+        method: "GET",
+      }),
+      providesTags: ["Service"],
     }),
     getApplications: builder.query<any, void>({
       query: () => ({
@@ -111,7 +139,30 @@ const backOfficeApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Education"],
     }),
-    
+
+    createService: builder.mutation<any, any>({
+      query: (newUser) => ({
+        url: `${backOfficeEndPoints.createServices}`,
+        method: "POST",
+        data: newUser,
+      }),
+      invalidatesTags: ["Service"],
+    }),
+    updateService: builder.mutation<any, any>({
+      query: (newUser) => ({
+        url: `${backOfficeEndPoints.updateServices}`,
+        method: "PUT",
+        data: newUser,
+      }),
+      invalidatesTags: ["Service"],
+    }),
+    deleteService: builder.mutation<any, any>({
+      query: (newUser) => ({
+        url: `${backOfficeEndPoints.deleteService}${newUser}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Service"],
+    }),
     deleteEmployee: builder.mutation<any, any>({
       query: (newUser) => ({
         url: `${backOfficeEndPoints.deleteEmployee}${newUser}`,
@@ -120,6 +171,15 @@ const backOfficeApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    deleteServices: builder.mutation<any, any>({
+      query: (newUser) => ({
+        url: `${backOfficeEndPoints.deleteServices}${newUser}`,
+        method: "POST",
+        data: newUser,
+      }),
+      invalidatesTags: ["Service"],
+    }),
+   
     createTask: builder.mutation<any, any>({
       query: (newUser) => ({
         url: `${backOfficeEndPoints.createTask}`,
@@ -127,6 +187,14 @@ const backOfficeApi = apiSlice.injectEndpoints({
         data: newUser,
       }),
       invalidatesTags: ["Task"],
+    }),
+    saveWorkFlow: builder.mutation<any, any>({
+      query: (newUser) => ({
+        url: `${backOfficeEndPoints.saveWorkFlow}`,
+        method: "POST",
+        data: newUser,
+      }),
+      invalidatesTags: ["Service"],
     }),
     restoreUser: builder.mutation<any, any>({
       query: (newUser) => ({
@@ -203,5 +271,15 @@ export const {
    useLazyGetArchivedEmployeesByEmployeeIdQuery,
    useLazyGetArchivedUserByUserIdQuery,
    useGetTasksQuery,
-   useCreateTaskMutation
+   useCreateTaskMutation,
+   useGetServiceDetailQuery,
+   useGetServicesQuery,
+   useDeleteServicesMutation,
+   useCreateServiceMutation,
+   useGetSavedWorkFlowQuery,
+   useLazyGetSavedWorkFlowQuery,
+   useSaveWorkFlowMutation,
+   useGetBussinessProcessQuery,
+   useUpdateServiceMutation,
+   useDeleteServiceMutation
 } = backOfficeApi;

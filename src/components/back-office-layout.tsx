@@ -29,7 +29,7 @@ import {
   ViewRole,
   ViewUser,
   _ViewApplications,
-  viewPermission,
+  viewPermission
 } from "../shared/shell/permissions-list";
 import Sidebar from "../shared/shell/sidebar";
 import { _BackOfficeApplications } from "./back-office/application/_application";
@@ -51,7 +51,10 @@ import NewRole from "./back-office/role/new-role";
 import { Roles } from "./back-office/role/role";
 import { UserDetail } from "./back-office/user/detail";
 import FormBuilder from "./back-office/work-flow/form-builder";
+import ServiceTable from "./back-office/work-flow/services/list";
+import TaskTable from "./back-office/work-flow/services/task-list";
 import ReactFlowLibrary from "./back-office/work-flow/work-flow";
+import { CaseHandling } from "./back-office/case-handling/case";
 
 const { Sider, Content, Footer } = Layout;
 
@@ -110,11 +113,17 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
   const { session } = useAuth();
   const menus = [
     {
+      name: t("Case Handling"),
+      path: `/case-handling`,
+      icon: Icon.CompassFilled,
+      permissions: [],
+     },
+    {
       name: t("Dashboard"),
       path: `/dashboard`,
       icon: Icon.DashboardOutlined,
       permissions: ViewDashboard,
-    },
+     },
     {
       name: t("Role"),
       path: `/roles`,
@@ -189,7 +198,18 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
       icon: Icon.SettingOutlined,
       child:[
         {
-          name: "design work flow",
+          name: "Services",
+          path: "/services",
+          icon: Icon.CustomerServiceFilled,
+        },
+        {
+          name: "Task",
+          path: "/tasks",
+          icon: Icon.DingtalkSquareFilled,
+        },
+       
+        {
+          name: "Design Bussiness Process",
           path: "/design-work-flow",
           icon: Icon.PlayCircleFilled,
         },
@@ -292,6 +312,15 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
                   </RoutePermissionGuard>
                 }
               />
+               <Route
+                path={`/case-handling`}
+                element={
+                  <RoutePermissionGuard requiredPermissions={[]}>
+                    <CaseHandling />
+                  </RoutePermissionGuard>
+                }
+              />
+              
               <Route
                 path={`employees/detail/:id`}
                 element={
@@ -434,6 +463,29 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
                     <ReactFlowLibrary />
                 }
               />
+                    <Route
+                path={`/settings/services`}
+                element={
+                    <ServiceTable />
+                }
+              />
+
+<Route
+                path={`/settings/tasks`}
+                element={
+                    <TaskTable />
+                }
+              />
+
+
+              
+<Route
+                path={`/settings/services`}
+                element={
+                    <TaskTable />
+                }
+              />
+              
 
 <Route
                 path={`/settings/form-builder`}

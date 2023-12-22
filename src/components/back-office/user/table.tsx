@@ -15,7 +15,7 @@ interface User {
 }
 
 export const CustomTable = (): JSX.Element => {
-  const { data: users, isLoading } = useGetUsersQuery();
+  const { data: users, isLoading} = useGetUsersQuery();
 
   const history = useNavigate();
   const [selectedRow, setSelectedRow] = useState<string | null>(null);

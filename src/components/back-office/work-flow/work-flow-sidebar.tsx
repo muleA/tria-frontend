@@ -1,8 +1,8 @@
 import { Add } from "@mui/icons-material";
 import { Button, Form, Input, Modal, Spin, Typography, message } from "antd";
-import React, { useState } from "react";
-import { useCreateTaskMutation, useGetTasksQuery } from "../../back-office.query";
+import { useState } from "react";
 import Empty from "../../../shared/empty-state";
+import { useCreateTaskMutation, useGetTasksQuery } from "../../back-office.query";
 
 export const SideBar = () => {
   const onDragStart = (event: any, nodeType: any) => {
@@ -67,7 +67,7 @@ const[createTask,{isLoading:creating}]=useCreateTaskMutation()
         {isLoading?(<>
         <Spin/>
         </>):(<>
-          {tasks?.map((node:any) => (
+          {taskList?.map((node:any) => (
           <div 
             key={node.id}
             className={`dndnode ${node.taskname}`}

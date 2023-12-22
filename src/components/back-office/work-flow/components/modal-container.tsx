@@ -1,8 +1,6 @@
-import { Container, Input, Menu, Modal, Pagination } from "@mantine/core";
-// import { Pagination } from "@ui";
-import { Button, Checkbox, Select } from "@mantine/core";
-import { Form, useForm } from "@mantine/form";
+import { Button, Container, Input, Modal, Pagination, Select } from "@mantine/core";
 import { IconSearch } from "@tabler/icons";
+import { Form } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MarkerType } from "reactflow";
@@ -43,18 +41,14 @@ const ModalContainer: React.FC<Props> = ({
 
   const strokeColor = getHandleColor(handletype);
 
-  const [filterValue, setFilterValue] = useState<string[]>([]);
 
   const [tasksList, setTasksList] = useState([]);
   const [unFliteredTaskList, setUnFliteredTaskList] = useState([]);
 
-  // const tasksList = nodesList.filter((node) => {
-  //   return node.id === 2 || !nodes.some((n) => n.id === node.id.toString()) || node.label.includes(taskSearch)
-  // });
-
+ 
   useEffect(() => {
     const filteredTasks:any = nodesList.filter((node) => {
-      return !nodes.some((n) => n.id === node.id.toString() || node.id === 2);
+      return !nodes.some((n: { id: string; }) => n.id === node.id.toString() || node.id === 2);
     });
     setTasksList(filteredTasks);
     setUnFliteredTaskList(filteredTasks);
@@ -110,10 +104,10 @@ const ModalContainer: React.FC<Props> = ({
     const edge:any = edges.find((e) => e.id === edgeId);
 
     // Find the source node of the edge
-    const sourceNode:any = nodes.find((n) => n.id === edge.source);
+    const sourceNode:any = nodes.find((n: { id: any; }) => n.id === edge.source);
 
     // Find the target node of the edge
-    const targetNode:any = nodes.find((n) => n.id === edge.target);
+    const targetNode:any = nodes.find((n: { id: any; }) => n.id === edge.target);
 
     const position = {
       x: 85,
@@ -157,10 +151,10 @@ const ModalContainer: React.FC<Props> = ({
     const nodeType = type;
 
     // Find the source node of the edge
-    const sourceNode:any= nodes.find((n) => n.id === edge.source);
+    const sourceNode:any= nodes.find((n: { id: any; }) => n.id === edge.source);
 
     // Find the target node of the edge
-    const targetNode:any = nodes.find((n) => n.id === edge.target);
+    const targetNode:any = nodes.find((n: { id: any; }) => n.id === edge.target);
 
     addCustomEdge({
       id: `${sourceNode.id}-${id}`,
@@ -189,7 +183,7 @@ const ModalContainer: React.FC<Props> = ({
     label: string
   ) => {
 
-    const sourceNode:any = nodes.find((n) => n.id === otherProps.id);
+    const sourceNode:any = nodes.find((n: { id: any; }) => n.id === otherProps.id);
 
     const position = {
       x: nodes.length >= 3 ? sourceNode.position.x : 85, 
@@ -274,13 +268,11 @@ const ModalContainer: React.FC<Props> = ({
     });
   }
 
-  const form = useForm({
-    initialValues: initialFormValues,
-  });
+
 
   const dropDownTasks = nodes
-    .filter((node) => node.id !== "1") // Exclude node with id of "1"
-    .map((node) => ({
+    .filter((node: { id: string; }) => node.id !== "1") // Exclude node with id of "1"
+    .map((node: { id: any; data: { label: any; }; }) => ({
       value: node.id,
       label: node.data.label || `Node ${node.id}`,
       disabled: false,
@@ -295,10 +287,10 @@ const ModalContainer: React.FC<Props> = ({
     const edge:any = edges.find((e) => e.id === edgeId);
 
     // Find the source node of the edge
-    const sourceNode:any = nodes.find((n) => n.id === edge.source);
+    const sourceNode:any = nodes.find((n: { id: any; }) => n.id === edge.source);
 
     // Find the target node of the edge
-    const targetNode:any = nodes.find((n) => n.id === edge.target);
+    const targetNode:any = nodes.find((n: { id: any; }) => n.id === edge.target);
 
     const position = {
       x: 85,
@@ -356,7 +348,7 @@ const ModalContainer: React.FC<Props> = ({
       setTasksList(searchResult);
     } else {
       const initialList = unFliteredTaskList.filter((node:any) => {
-        return !nodes.some((n) => n.id === node.id.toString());
+        return !nodes.some((n: { id: any; }) => n.id === node.id.toString());
       });
       setTasksList(initialList);
     }
@@ -371,7 +363,7 @@ const ModalContainer: React.FC<Props> = ({
     }
     else {
       const initialList = unFliteredTaskList.filter((node:any) => {
-        return !nodes.some((n) => n.id === node.id.toString())
+        return !nodes.some((n: { id: any; }) => n.id === node.id.toString())
       })
       
       setTasksList(initialList)
@@ -412,7 +404,7 @@ const ModalContainer: React.FC<Props> = ({
                   onChange={handleInputChange}
                 />
 
-                <Menu shadow="md" width={200}>
+           {/*      <Menu shadow="md" width={200}>
                   <Menu.Target>
                     <Button className="bg-white text-black rounded-none shadow-sm shadow-slate-500">
                       Filter By
@@ -440,7 +432,7 @@ const ModalContainer: React.FC<Props> = ({
                       </Menu.Item>
                     </Checkbox.Group>
                   </Menu.Dropdown>
-                </Menu>
+                </Menu> */}
               </div>
               <Container className="p-0">
                 <div className="flex flex-col pt-2">
@@ -466,7 +458,12 @@ const ModalContainer: React.FC<Props> = ({
           <div className="h-24">
             <Modal.Title></Modal.Title>
             <Modal.Body>
-           <Form form={form} onSubmit={handleSubmit}>
+
+           <Form
+    name="basic"
+    onFinish={handleSubmit}
+ 
+  >
                 <div className="mt-2 mb-2">
                   <p className="mb-4">
                     You chose a task with more than one output. Please assign to

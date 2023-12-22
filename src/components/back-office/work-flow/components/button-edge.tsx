@@ -1,9 +1,9 @@
 import React from "react";
-import { getSmoothStepPath, getBezierPath, Position, EdgeLabelRenderer } from "reactflow";
+import { EdgeLabelRenderer, Position, getSmoothStepPath } from "reactflow";
 
-import ModalContainer from "./modal-container";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
+import ModalContainer from "./modal-container";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../store/app.store";
@@ -139,6 +139,7 @@ export default function CustomEdge({
 
       <EdgeLabelRenderer>
         <EdgeLabel
+        
           transform={`translate(-50%, -90%) translate(${labelX}px,${labelY}px)`}
           label={label}
         />

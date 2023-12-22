@@ -36,7 +36,7 @@ const FormBasedNode = ({ data, selected, ...otherProps }:any) => {
         <Handle
           className="w-4 h-4 rounded-full bg-transparent border-none bg-contain cursor-pointer"
           type="source"
-          style={{ backgroundImage: `url("../resources/images/circle-plus-green.svg")` }}
+          style={{ backgroundImage: `url(../resources/images/circle-plus-green.svg)` }}
           position={Position.Bottom}
           id="Yes"
           onClick={(event) => {
