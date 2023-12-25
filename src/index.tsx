@@ -1,10 +1,11 @@
-import ReactDOM from "react-dom/client";
 import "antd/dist/reset.css";
-import "./index.css";
-import App from "./App";
-import { BrowserRouter } from "react-router-dom";
-import reportWebVitals from "./reportWebVitals";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import App from "./App";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 import { store } from "./store/app.store";
 
 const root = ReactDOM.createRoot(
@@ -14,6 +15,8 @@ root.render(
   <Provider store={store}>
   <BrowserRouter>
     <App />
+    <ToastContainer limit={3} theme="colored"  />
+
   </BrowserRouter>
   </Provider>
 );

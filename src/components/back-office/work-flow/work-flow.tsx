@@ -30,11 +30,10 @@ import { removeNode, selectedNode, setNodes } from "./store/nodes.slice";
 import { addEdge, removeEdge, setEdges, setHovered } from "./store/edges.slice";
 
 import { Loader } from "@mantine/core";
-import { Button, Select } from "antd";
+import { Button, Checkbox } from "antd";
 import { convertReactFlowToXState } from "../../../models/convert-to-xstate";
 import { Notify } from "../../../shared/notification/notify";
 import {
-  useGetServicesQuery,
   useLazyGetSavedWorkFlowQuery,
   useSaveWorkFlowMutation,
 } from "../../back-office.query";
@@ -46,9 +45,9 @@ import { addNode } from "./store/nodes.slice";
 import { resetIsValid } from "./store/validation.slice";
 const connectionLineStyle = { stroke: "#040000" };
 
-const ReactFlowLibrary = () => {
+const ReactFlowLibrary = ({selectedServiceId}:any) => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const [saveWorkFlow, { isLoading }] = useSaveWorkFlowMutation();
+  const [saveWorkFlow, { isLoading,isSuccess:saveWorkFlowSuccess,isError }] = useSaveWorkFlowMutation();
   const nodes = useSelector((state: RootState) => state?.nodes?.nodes);
   const edges = useSelector((state: RootState) => state?.edges?.edges);
   const [edgeDeleted, setedgeDeleted] = useState("");
@@ -127,7 +126,7 @@ const ReactFlowLibrary = () => {
     [dispatch]
   );
 
-  const onEdgeClick = useCallback(
+   const onEdgeClick = useCallback(
     (event: any, edge: { id: React.SetStateAction<string> }) => {
       setedgeDeleted(edge.id);
       dispatch(selectedNode(""));
@@ -188,6 +187,7 @@ const ReactFlowLibrary = () => {
               height: 20,
               color: strokeColor,
             },
+            targetNode: targetNode, 
             ...params,
           })
         );
@@ -262,35 +262,42 @@ const ReactFlowLibrary = () => {
   const [rfInstance, setRfInstance] = useState<any>(null);
 
   const saveDiagram = () => {
-    let allNodesValid = true;
-    if (rfInstance) {
-      const flow = rfInstance?.toObject();
-      saveWorkFlow({
-        reactflow: JSON.stringify(flow),
-        workflow:convertReactFlowToXState(flow),
-        serviceId: selectedServiceId,
-        isActive: true,
-        organizationId: false,
-      });
-       
-    }
+    const flow = rfInstance?.toObject();
 
-    nodes.forEach((node: any) => {
-      const result: any = checkNodeEdges(node, edges, handles);
-      if (result !== null) {
-        allNodesValid = false;
-        Notify(
-          "error",
-          `Node "${result.data.label}" handles are not fully connected.`
-        );
+    console.log("convertReactFlowToXState(flow)",convertReactFlowToXState(flow))
+    try {
+      let allNodesValid = true;
+      if (rfInstance) {
+        saveWorkFlow({
+          reactflow: JSON.stringify(flow),
+          workflow: convertReactFlowToXState(flow),
+          serviceId: selectedServiceId,
+          isActive: true,
+          organizationId: false,
+        });
       }
-      Notify("success", "successfully added");
-    });
-
-    if (allNodesValid) {
-      console.log("Success!");
+  
+      nodes.forEach((node: any) => {
+        const result: any = checkNodeEdges(node, edges, handles);
+        if (result !== null) {
+          allNodesValid = false;
+          Notify(
+            "warning",
+            `Node "${result.data.label}" handles are not fully connected.`
+          );
+        }
+      });
+  
+      if (allNodesValid) {
+        saveWorkFlowSuccess && Notify("success", "work flow design saved");
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the execution
+      Notify("error","Error while saving diagram:");
+      // You can add additional error handling or logging here
     }
   };
+  
 
   let parallelID = 0;
   const addParallelTask = () => {
@@ -325,11 +332,8 @@ const ReactFlowLibrary = () => {
       })
     );
   };
-  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(
-    null
-  );
+ 
 
-  const { data: services, isLoading: serviceLoading } = useGetServicesQuery();
   const [
     triggerSavedWorkFlowDesign,
     { data: savedDesign, isSuccess, isLoading: designLoading },
@@ -360,35 +364,25 @@ const ReactFlowLibrary = () => {
       }
     }
   }, [isSuccess, savedDesign?.reactflow, dispatch]);
-  
+  const [disabled, setDisabled] = useState(false);
 
 
-  const handleServiceChange = (value: string) => {
-    setSelectedServiceId(value);
-    // Additional logic for fetching tasks based on the selected service ID can be added here
-  };
   return (
     <div className="mb-2.5 flex h-4/5 min-h-screen flex-col rounded-sm border-blue-800 p-2">
-      <div className="flex justify-between">
-        {/* <Button
+      <div className="flex justify-end">
+      <h1 style={{ display: 'flex', alignItems: 'center' }} className="mr-4">
+      <Checkbox checked={disabled} onChange={(event) => setDisabled(event.target.checked)} />
+      <span style={{ marginLeft: '8px' }}>Lock</span>
+    </h1>
+      
+       <Button
           className="mb-2 mr-2 w-fit bg-orange-600 hover:bg-orange-700"
           onClick={() => addParallelTask()}
         >
           Add Parallel Task
-        </Button> */}
+        </Button> 
 
-        <Select
-          placeholder="Select a service"
-          style={{ width: 200, marginBottom: 16 }}
-          onChange={handleServiceChange}
-          loading={serviceLoading}
-        >
-          {services?.map((service: any) => (
-            <Select.Option l key={service.id} value={service.id}>
-              {service.name}
-            </Select.Option>
-          ))}
-        </Select>
+     
         <Button
           className="mb-2 w-fit bg-primary hover:bg-primary-800"
           onClick={() => saveDiagram()}
@@ -397,7 +391,7 @@ const ReactFlowLibrary = () => {
           Save
         </Button>
       </div>
-      <ReactFlowProvider>
+      <ReactFlowProvider >
         <div
           className="h-screen flex-grow border-2 border-blue-500"
           ref={reactFlowWrapper}
@@ -409,7 +403,7 @@ const ReactFlowLibrary = () => {
             </div>
           ) : (
             <ReactFlow
-              nodes={nodes}
+            nodes={nodes}
               edges={edges}
               onConnect={onConnect}
               onNodesChange={onNodesChange}
@@ -429,16 +423,21 @@ const ReactFlowLibrary = () => {
               onConnectStart={onConnectStart as any}
               elevateEdgesOnSelect={true}
               snapToGrid={true}
+
               snapGrid={[5, 5]}
               fitView
+          
               onInit={setRfInstance as any}
+              onError={(code,message)=>{
+                Notify("error",code+message)
+              }}
             >
               <Background
                 className="bg-white"
                 variant={BackgroundVariant.Dots}
                 size={2}
               />
-              <Controls />
+              <Controls  />
             </ReactFlow>
           )}
         </div>

@@ -19,7 +19,15 @@ const backOfficeApi = apiSlice.injectEndpoints({
     }),
     getServiceDetail: builder.query<any, any>({
       query: (id) => ({
-        url: `${backOfficeEndPoints.getServiceDetail}/${id}`,
+        url: `${backOfficeEndPoints.getServiceDetail}${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Service"],
+    }),
+
+    getActiveBpWithServiceId: builder.query<any, any>({
+      query: (id) => ({
+        url: `${backOfficeEndPoints.getActiveBpWithServiceId}/${id}`,
         method: "GET",
       }),
       providesTags: ["Service"],
@@ -273,6 +281,7 @@ export const {
    useGetTasksQuery,
    useCreateTaskMutation,
    useGetServiceDetailQuery,
+   useLazyGetServiceDetailQuery,
    useGetServicesQuery,
    useDeleteServicesMutation,
    useCreateServiceMutation,
@@ -281,5 +290,8 @@ export const {
    useSaveWorkFlowMutation,
    useGetBussinessProcessQuery,
    useUpdateServiceMutation,
-   useDeleteServiceMutation
+   useDeleteServiceMutation,
+   useLazyGetActiveBpWithServiceIdQuery,
+   useGetActiveBpWithServiceIdQuery,
+   useLazyGetTasksQuery
 } = backOfficeApi;

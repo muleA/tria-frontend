@@ -51,6 +51,7 @@ function EdgeLabel({ transform, label }: { transform: string; label: string }) {
       className="drag nopan"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      onMouseMove={handleMouseMove as any}
     >
       {label}
     </div>
@@ -70,13 +71,6 @@ interface CustomEdgeProps {
   label?: any;
 }
 
-const onEdgeClick = (
-  evt: React.MouseEvent<HTMLButtonElement>,
-  id: string,
-  ...otherprops: any[] 
-) => {
-  evt.stopPropagation();
-};
 
 export default function CustomEdge({
   id,
@@ -125,8 +119,9 @@ export default function CustomEdge({
         >
           <div className="flex justify-center items-center min-h-[40px]">
             <button
-              className="w-[20px] h-[20px] bg-gray-300 border border-black cursor-pointer rounded-full text-xs hover:bg-green-700"
-              onClick={(event) => {
+             
+              className="w-[20px] text-md h-[20px] bg-gray-300 border border-black cursor-pointer rounded-full text-md hover:bg-green-700"
+              onClick={() => {
                 setEdgeId(id);
                 open();
               }}
@@ -137,9 +132,8 @@ export default function CustomEdge({
         </foreignObject>
       )}
 
-      <EdgeLabelRenderer>
+     <EdgeLabelRenderer>
         <EdgeLabel
-        
           transform={`translate(-50%, -90%) translate(${labelX}px,${labelY}px)`}
           label={label}
         />

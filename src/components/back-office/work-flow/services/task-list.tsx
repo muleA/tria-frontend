@@ -1,24 +1,30 @@
-import { Button, Modal, Select, Table } from "antd";
-import { useState } from "react";
+import { Button, Modal, Table } from "antd";
+import { useEffect, useState } from "react";
 import {
-  useGetBussinessProcessQuery,
-  useGetTasksQuery
+  useLazyGetActiveBpWithServiceIdQuery, useLazyGetTasksQuery
 } from "../../../back-office.query";
 import { Service } from "../model/service";
 import TaskForm from "./task-form";
 
-const TaskTable = () => {
+const TaskTable = ({serviceId}:any) => {
   const [deleteRecord, setDeleteRecord] = useState<Service | null>(null);
   const [editRecord, setEditRecord] = useState<Service | null>(null);
   const [newFormVisible, setNewFormVisible] = useState<boolean>(false);
-  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(
-    null
-  );
+  const [triggerActiveBP,{ data: activeBP, isLoading,isSuccess }] = useLazyGetActiveBpWithServiceIdQuery();
+  useEffect(()=>{
+     triggerActiveBP(serviceId)
+  },[serviceId, triggerActiveBP])
 
-  const { data: services, isLoading } = useGetBussinessProcessQuery();
-  const { data: tasks, isLoading: taskLoading } = useGetTasksQuery(
-    selectedServiceId as any
-  );
+  console.log("activeBP",activeBP)
+
+  const [triggerTask,{ data: tasks, isLoading: taskLoading }] = useLazyGetTasksQuery( );
+
+  useEffect(()=>{
+   if(isSuccess && activeBP?.id )
+   {
+    triggerTask(activeBP?.id)
+   }
+  },[activeBP?.id, isSuccess, triggerTask])
 
   const columns = [
     {
@@ -84,35 +90,17 @@ const TaskTable = () => {
     setEditRecord(record);
   };
 
-  const handleServiceChange = (value: string) => {
-    setSelectedServiceId(value);
-    // Additional logic for fetching tasks based on the selected service ID can be added here
-  };
-
   return (
     <>
       <Table
         dataSource={tasks ?? []}
-        loading={taskLoading}
+        loading={taskLoading ||isLoading}
         columns={columns}
         rowKey="key"
         title={() => (
           <div className="flex justify-between">
-            {
-              <Select
-                placeholder="Select a Bussiness process"
-                style={{ width: 200, marginBottom: 16 }}
-                onChange={handleServiceChange}
-                loading={isLoading}
-              >
-                {services?.map((service: any) => (
-                  <Select.Option l key={service.id} value={service.id}>
-                    {service.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            }
-            {selectedServiceId?(
+           
+            {activeBP?.id?(
               <Button
                 type="primary"
                 className="bg-primary"
@@ -143,7 +131,7 @@ const TaskTable = () => {
           onCancel={() => setNewFormVisible(false)}
           footer={null}
         >
-          <TaskForm mode="new" selectedServiceId={selectedServiceId as any} />
+          <TaskForm mode="new" selectedServiceId={serviceId as any} />
         </Modal>
       )}
     </>

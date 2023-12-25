@@ -23,9 +23,8 @@ const ConfirmationNode = ({ data, selected, ...otherProps }: any) => {
   const dispatch = useDispatch();
   const isValid = useSelector((state: RootState) => state.validation.isValid);
   const [opened, { open, close }] = useDisclosure(false);
-  const [returned, setReturned] = useState(false);
+  const [returned] = useState(false);
   const [openedDrop, setOpenedDrop] = useState(false);
-  const [widthTest, setWidthTest] = useState(4);
 
   const size = useStore((s) => {
     const node = s.nodeInternals?.get(otherProps["id"]);
@@ -74,7 +73,7 @@ const ConfirmationNode = ({ data, selected, ...otherProps }: any) => {
 
   const throwError = () => {
     Notify(
-      "success",
+      "error",
       "You cannot add more nodes since you already have an edge connected to this handle. Use the button on the edge if you wish to add a task in between."
     );
   };
@@ -86,28 +85,12 @@ const ConfirmationNode = ({ data, selected, ...otherProps }: any) => {
     );
   };
 
-  // const widthOutside = nodes.find((node) => node.id === otherProps.id).width;
-  // console.log("NO refresh")
-  // useEffect(() => {
-  //   setWidthTest(widthOutside);
-  //   console.log("From useEffect", widthTest)
-  // }, [widthOutside]);
-  // console.log(`Width from outside: ${widthOutside}`);
-  //
-
-  // const widthCalc = () => {
-  //   const width = nodes.find((node) => node.id === otherProps.id).width;
-  //   console.log('Width from widthCalc', width);
-  // };
-
   const handleResize = (event: any, labelRef: { current: any }) => {
     const labelEl = labelRef.current;
     const labelWidth = labelEl?.offsetWidth || 0;
 
     // Calculate the maximum number of characters that can fit in the label's width
-    // const maxChars = Math.floor(data.label.length * (labelWidth / labelEl.scrollWidth));
-
-    const maxChars = 20;
+     const maxChars = Math.floor(data.label.length * (labelWidth / labelEl.scrollWidth));
 
     // Trim the label to the maximum number of characters
     const label = data.label.substring(0, maxChars);
@@ -127,11 +110,7 @@ const ConfirmationNode = ({ data, selected, ...otherProps }: any) => {
           color="#036917"
           isVisible={selected}
           onResize={(event) => {
-            // console.log(`Resizing node ${otherProps.id}`);
-            // const width = nodes.find((node) => node.id === otherProps.id).width;
-            // console.log({ data });
-            //console.log(`Width from within: ${width}`)
-            // handleResize(event, labelRef);
+             handleResize(event, labelRef);
           }}
           handleStyle={{ width: "8px", height: "8px" }}
           lineStyle={{ borderWidth: "1.3px" }}

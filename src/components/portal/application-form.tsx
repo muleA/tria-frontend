@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Steps, Button, message, Collapse, Card, Alert, Upload } from "antd";
-import { Formik, Form, Field, ErrorMessage, useFormikContext } from "formik";
-import * as Yup from "yup";
+import { Alert, Button, Card, Collapse, Select, Steps, message } from "antd";
 import classNames from "classnames";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
 
 import axios from "axios";
-import { useApplyToLicenseMutation } from "../portal.query";
+import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../configs/config";
 import { useAuth } from "../../shared/auth/use-auth";
-import { UploadOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 import { DefaultDialog } from "../../shared/default-dialogue";
+import { useGetServicesQuery } from "../back-office.query";
+import { useApplyToLicenseMutation } from "../portal.query";
 
 const { Step } = Steps;
 
@@ -91,6 +91,16 @@ const ApplicationForm = () => {
     }
   };
 
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(
+    null
+  );
+
+  const { data: services, isLoading: serviceLoading } = useGetServicesQuery();
+
+  const handleServiceChange = (value: string) => {
+    setSelectedServiceId(value);
+    // Additional logic for fetching tasks based on the selected service ID can be added here
+  };
   const fetchCertificates = async () => {
     try {
       const response = await axios.get(
@@ -204,7 +214,7 @@ const ApplicationForm = () => {
             // Here, we're just logging the form values
             console.log("Step 2 form values:", values);
             try {
-              await apply({ ...values, userId: session?.userInfo?.userId }).unwrap;
+              await apply({ ...values, userId: session?.userInfo?.userId,serviceId:selectedServiceId }).unwrap;
               message.success("application submitted successfully");
               navigate("/my-applications")
             } catch (err) {
@@ -232,7 +242,26 @@ const ApplicationForm = () => {
                         ></Alert>
                       </>
                     ) : null}
+
                     <div className="mb-4">
+                    <Select
+          placeholder="Select a service"
+          style={{ width: "100%" }}
+          onChange={handleServiceChange}
+          loading={serviceLoading}
+        >
+          {services?.map((service: any) => (
+            <Select.Option l key={service.id} value={service.id}>
+              {service.name}
+            </Select.Option>
+          ))}
+        </Select>
+
+                    </div>
+                    <div className="mb-4">
+
+
+
                       <label htmlFor="applicationType" className="font-bold">
                         Application Type <span className="text-red-400">*</span>
                       </label>

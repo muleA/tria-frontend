@@ -1,5 +1,6 @@
 import { Button, Modal, Table } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useDeleteServiceMutation, useGetServicesQuery } from '../../../back-office.query';
 import { Service } from '../model/service';
 import ServiceForm from './service-form';
@@ -12,7 +13,7 @@ const ServiceTable = () => {
   const [newFormVisible, setNewFormVisible] = useState<boolean>(false);
 const [deleteService,{isLoading:deleteLoading}]=useDeleteServiceMutation()
 const {data:services,isLoading}=useGetServicesQuery()
-
+const navigate=useNavigate()
 
   const columns = [
     {
@@ -47,6 +48,8 @@ const {data:services,isLoading}=useGetServicesQuery()
           <Button type="link" onClick={() => handleDelete(record)}>
             Delete
           </Button>
+          <Button type="link" onClick={() => navigate(`/services/detail/${record.id}`)}>
+Detail          </Button>
         </span>
       ),
     },

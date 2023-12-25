@@ -1,5 +1,6 @@
 import { Button, Form, Input, Select } from 'antd';
 import React from 'react';
+import { Notify } from '../../../../shared/notification/notify';
 import { useCreateTaskMutation } from '../../../back-office.query';
 import { Service } from '../model/service';
 
@@ -16,6 +17,7 @@ const TaskForm: React.FC<TaskFormProps> = ({initialData,selectedServiceId }) => 
   const onFinish = (values: Service) => {
     form.resetFields();
     createService({...values,bpId:selectedServiceId})
+    Notify("success","sucess")
   };
 
   const workflowSteps: { value: string; label: string }[] = [
@@ -25,8 +27,12 @@ const TaskForm: React.FC<TaskFormProps> = ({initialData,selectedServiceId }) => 
 
   const taskType: { value: string; label: string }[] = [
     { value: 'confirmation', label: 'Confirmation' },
-    { value: 'Approval', label: 'Approval' },
-    { value: 'Certificate', label: 'Certificate' },
+    { value: 'approval', label: 'Approval' },
+    { value: 'certificate', label: 'Certificate' },
+    {value:"notification",label:"Notification"},
+    {value:"review",label:"Review"},
+    {value:"redirect",label:"Redirect"},
+    {value:"formBased",label:"FormBased"},
     { value: 'end', label: 'End' },
   ];
 

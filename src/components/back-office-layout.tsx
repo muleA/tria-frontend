@@ -41,6 +41,7 @@ import { ArchivedEmployeeDetails } from "./back-office/archives/employee/archive
 import { ArchivedEmployees } from "./back-office/archives/employee/archived-employees";
 import { ArchivedUsers } from "./back-office/archives/user/archived-user";
 import { ArchivedUserDetail } from "./back-office/archives/user/archived-user-detail";
+import { CaseHandling } from "./back-office/case-handling/case";
 import { NewEmployee } from "./back-office/employee/new-employee";
 import LicenseDetail from "./back-office/license/detail.";
 import { License } from "./back-office/license/license";
@@ -52,9 +53,9 @@ import { Roles } from "./back-office/role/role";
 import { UserDetail } from "./back-office/user/detail";
 import FormBuilder from "./back-office/work-flow/form-builder";
 import ServiceTable from "./back-office/work-flow/services/list";
+import ServiceDetailWrapper from "./back-office/work-flow/services/service-detail-wrapper";
 import TaskTable from "./back-office/work-flow/services/task-list";
 import ReactFlowLibrary from "./back-office/work-flow/work-flow";
-import { CaseHandling } from "./back-office/case-handling/case";
 
 const { Sider, Content, Footer } = Layout;
 
@@ -112,12 +113,7 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
   })} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
   const { session } = useAuth();
   const menus = [
-    {
-      name: t("Case Handling"),
-      path: `/case-handling`,
-      icon: Icon.CompassFilled,
-      permissions: [],
-     },
+   
     {
       name: t("Dashboard"),
       path: `/dashboard`,
@@ -147,6 +143,11 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
       path: `/employees`,
       icon: Icon.TeamOutlined,
       permissions: ViewEmployee,
+    },
+    {
+      name: "Services",
+      path: "/services",
+      icon: Icon.CustomerServiceFilled,
     },
     {
       name: t("Application"),
@@ -197,11 +198,7 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
       path: "/settings",
       icon: Icon.SettingOutlined,
       child:[
-        {
-          name: "Services",
-          path: "/services",
-          icon: Icon.CustomerServiceFilled,
-        },
+      
         {
           name: "Task",
           path: "/tasks",
@@ -464,11 +461,20 @@ const BackOfficeLayoutWrapper = ({ children }: any) => {
                 }
               />
                     <Route
-                path={`/settings/services`}
+                path={`/services`}
                 element={
                     <ServiceTable />
                 }
               />
+
+<Route
+                path={`/services/detail/:id`}
+                element={
+                    <ServiceDetailWrapper />
+                }
+              />
+
+
 
 <Route
                 path={`/settings/tasks`}

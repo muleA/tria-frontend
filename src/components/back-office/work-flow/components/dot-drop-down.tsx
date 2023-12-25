@@ -2,9 +2,6 @@ import { Button, Menu } from '@mantine/core';
 import { IconTrash, IconX } from "@tabler/icons";
 
 const DotDropDown = ({ opened, setOpened, nodeId ,handleDelete}: any) => {
-
- 
-
   return (
     <Menu shadow="md" position="right" width={200} opened={opened} onChange={() => setOpened(!opened)}>
       <Menu.Dropdown className="mt-5 ml-10">

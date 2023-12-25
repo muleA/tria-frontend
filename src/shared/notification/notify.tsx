@@ -9,6 +9,6 @@ export const Notify = (type: 'success' | 'error' | 'warning' | 'info', message: 
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
-    draggable: true,
+    draggable: false,
   });
 };

@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Handle, Position } from "reactflow";
-import { addHandle } from "../store/handle.slice";
-import ModalContainer from "./modal-container";
-import { IconDotsVertical } from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
-import { NodeResizer } from "reactflow";
+import { IconDotsVertical } from "@tabler/icons";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Handle, NodeResizer, Position } from "reactflow";
+import { addHandle } from "../store/handle.slice";
 import DotDropDown from "./dot-drop-down";
-import greenCirclePlus from "../images/circle-plus-green.svg"
+import ModalContainer from "./modal-container";
 
 
 export const ParallelStart = ({ data, selected, ...otherProps }:any) => {
@@ -35,7 +33,7 @@ export const ParallelStart = ({ data, selected, ...otherProps }:any) => {
         <Handle
           className="w-4 h-4 rounded-full bg-transparent border-none bg-contain cursor-pointer"
           type="source"
-          style={{ backgroundImage: `url(../resources/images/circle-plus-green.svg)`}}
+          style={{ backgroundImage: `url("../resources/images/circle-plus-green.svg")` }}
           position={Position.Bottom}
           id="Yes"
           onClick={(event) => {
@@ -89,7 +87,7 @@ export const ParallelEnd = ({ data, selected, ...otherProps }:any) => {
         <Handle
           className="w-4 h-4 rounded-full bg-transparent border-none bg-contain cursor-pointer mb-2"
           type="source"
-          style={{ backgroundImage: `url("../resources/images/circle-plus-green.svg")`}}
+          style={{ background: `url("../resources/images/circle-plus-green.svg")` }}
           position={Position.Bottom}
           id="Yes"
           onClick={(event) => {

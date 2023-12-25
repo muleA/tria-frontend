@@ -2,11 +2,13 @@ import { Button, Tooltip } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical } from "@tabler/icons";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Handle, NodeResizer, NodeToolbar, Position } from "reactflow";
 import { addHandle } from "../store/handle.slice";
 import DotDropDown from "./dot-drop-down";
 import ModalContainer from "./modal-container";
+import { removeEdge } from "../store/edges.slice";
+import { RootState } from "../store/app.store";
 
 
 const FormBasedNode = ({ data, selected, ...otherProps }:any) => {
@@ -14,11 +16,25 @@ const FormBasedNode = ({ data, selected, ...otherProps }:any) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [returned, setReturned] = useState(false);
   const [openedDrop, setOpenedDrop] = useState(false);
+  const edges = useSelector((state: RootState) => state.edges.edges);
+
+  const handleDelete = () => {
+    const nodeId = otherProps.id;
+
+    // Remove edges connected to the current node
+    const edgesToRemove = edges.filter(
+      (edge: { source: any; target: any; }) => edge.source === nodeId || edge.target === nodeId
+    );
+
+    edgesToRemove.forEach((edge: { id: any; }) => {
+      dispatch(removeEdge(edge.id));
+    });
+  };
 
   return (
     <>
       <NodeToolbar position={Position.Right}>
-        <Button className='bg-red-700 hover:bg-red-900'>Delete</Button>
+        <Button className='bg-red-700 hover:bg-red-900' onClick={handleDelete}>Delete</Button>
       </NodeToolbar> 
       <div className="w-[278px]" >
         <NodeResizer color="#036917" isVisible={selected} handleStyle={{ width: "8px", height: "8px" }} lineStyle={{borderWidth: "1.3px"}} minWidth={100} minHeight={40} />
