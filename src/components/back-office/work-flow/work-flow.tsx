@@ -428,9 +428,9 @@ const ReactFlowLibrary = ({selectedServiceId}:any) => {
               fitView
           
               onInit={setRfInstance as any}
-              onError={(code,message)=>{
+             /*  onError={(code,message)=>{
                 Notify("error",code+message)
-              }}
+              }} */
             >
               <Background
                 className="bg-white"
